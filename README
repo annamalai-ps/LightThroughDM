@@ -1,0 +1,9 @@
+Cactus Code Thorn LightThroughDM
+Author(s)    : Annamalai P. S. <annamalaips.97@gmail.com>
+Maintainer(s): Annamalai P. S. <annamalaips.97@gmail.com>
+Licence      : LGPL
+--------------------------------------------------------------------------
+
+1. Purpose
+
+Solve the Maxwell equations in curved spacetime for Schwarzschild solution.

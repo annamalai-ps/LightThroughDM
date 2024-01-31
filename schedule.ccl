@@ -1,0 +1,19 @@
+# Schedule definitions for thorn LightThroughDM
+
+STORAGE: state
+
+SCHEDULE LightThroughDM_Initial AT initial
+{
+  LANG: C
+  WRITES: state(interior)
+  SYNC: state
+} "Initialize scalar wave state"
+
+
+SCHEDULE LightThroughDM_RHS IN ODESolvers_RHS
+{
+  LANG: C
+  READS: state(everywhere)
+  WRITES: rhs(interior)
+  SYNC: rhs
+} "Calculate scalar wave RHS"

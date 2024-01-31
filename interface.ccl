@@ -1,0 +1,34 @@
+# Interface definition for thorn LightThroughDM
+
+IMPLEMENTS: LightThroughDM
+
+INHERITS: CarpetX
+
+USES INCLUDE HEADER: loop_device.hxx
+USES INCLUDE HEADER: vect.hxx
+
+
+
+CCTK_REAL state TYPE=gf TAGS='rhs="rhs"'
+{
+  phi
+  mu
+  Ax
+  nu
+  Ay
+  chi 
+  Az
+  psi
+} "Scalar wave state vector"
+
+CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
+{
+  phi_rhs
+  mu_rhs
+  Ax_rhs
+  nu_rhs
+  Ay_rhs
+  chi_rhs 
+  Az_rhs
+  psi_rhs
+} "RHS of scalar wave state vector"
