@@ -24,9 +24,21 @@ constexpr void standing_wave(const T A, const T kx, const T ky, const T kz,
   const T pi = acos(-T(1));
   const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
 
-  u = A * cos(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+  phi = A * cos(2 * pi * omega * t) * cos(2 * pi * kx * x) *
       cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
-  rho = A * (-2 * pi * omega) * sin(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+  mu = A * (-2 * pi * omega) * sin(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+        cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
+  Ax = A * cos(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+      cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
+  nu = A * (-2 * pi * omega) * sin(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+        cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
+  Ay = A * cos(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+      cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
+  chi = A * (-2 * pi * omega) * sin(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+        cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
+  Az = A * cos(2 * pi * omega * t) * cos(2 * pi * kx * x) *
+      cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
+  psi = A * (-2 * pi * omega) * sin(2 * pi * omega * t) * cos(2 * pi * kx * x) *
         cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
 }
 
@@ -37,14 +49,15 @@ constexpr void gaussian(const T A, const T W, const T x_offset const T t, const 
                         const T z, T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi) {
   using std::exp, std::pow, std::sqrt;
 
-  const T r = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+  phi = A*exp(-( pow(x + x_offset,2.0) + pow(y,2.0) + pow(z,2.0)  )/(2.0*pow(W, 2)) );
+  Ax = A*exp(-( pow(x + x_offset,2.0) + pow(y,2.0) + pow(z,2.0)  )/(2.0*pow(W, 2)) );
+  Ay = A*exp(-( pow(x + x_offset,2.0) + pow(y,2.0) + pow(z,2.0)  )/(2.0*pow(W, 2)) );
+  Az = A*exp(-( pow(x + x_offset,2.0) + pow(y,2.0) + pow(z,2.0)  )/(2.0*pow(W, 2)) );
 
-  const auto f = [&](const T v) {
-    return A * exp(-pow(v, 2) / (2 * pow(W, 2)));
-  };
-
-
-
+  mu = 0.0;
+  nu = 0.0;
+  chi = 0.0;
+  psi = 0.0;
   
 }
 
