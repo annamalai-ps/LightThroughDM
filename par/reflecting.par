@@ -18,13 +18,6 @@ CarpetX::ncells_x = $ncells
 CarpetX::ncells_y = $ncells
 CarpetX::ncells_z = $ncells
 
-CarpetX::x_min = -1.0
-CarpetX::x_max = 1.0
-CarpetX::y_min = -1.0
-CarpetX::y_max = 1.0
-CarpetX::z_min = -1.0
-CarpetX::z_max = 1.0
-
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
