@@ -6,7 +6,7 @@ ActiveThorns = "
     LightThroughDM
 "
 $nlevels = 1
-$ncells = 256
+$ncells = 128
 $out_every = 10
 
 Cactus::cctk_show_schedule = no
@@ -21,7 +21,7 @@ CarpetX::ncells_z = $ncells
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 1.0
+Cactus::cctk_final_time = 1.5
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2
@@ -39,7 +39,7 @@ LightThroughDM::boundary_condition = "reflecting"
 # Physics parameters
 LightThroughDM::M = 0.001
 LightThroughDM::a_ext = 0.2
-LightThroughDM::gaussian_width = 0.1
+LightThroughDM::gaussian_width = 0.05
 LightThroughDM::amplitude = 1.0
 LightThroughDM::gaussian_x_offset = 0.5
 
