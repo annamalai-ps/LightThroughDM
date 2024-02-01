@@ -101,11 +101,11 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
           using std::pow;
           CCTK_REAL ddu = 0;
           for (int d = 0; d < dim; ++d)
-            ddu += (u(p.I - p.DI[d]) - 2 * u(p.I) + u(p.I + p.DI[d])) /
+            ddu += (phi(p.I - p.DI[d]) - 2 * phi(p.I) + phi(p.I + p.DI[d])) /
                    pow(p.DX[d], 2);
 
-          u_rhs(p.I) = rho(p.I);
-          rho_rhs(p.I) = ddu;
+          phi_rhs(p.I) = mu(p.I);
+          mu_rhs(p.I) = ddu;
         });
 
   } else if (CCTK_EQUALS(boundary_condition, "reflecting")) {
