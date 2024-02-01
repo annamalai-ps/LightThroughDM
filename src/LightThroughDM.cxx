@@ -45,7 +45,7 @@ constexpr void standing_wave(const T A, const T kx, const T ky, const T kz,
 // u(t,r) = (f(t-r) - f(t+r)) / r
 // f(v) = A exp(-1/2 (r/W)^2)
 template <typename T>
-constexpr void gaussian(const T A, const T W, const T x_offset const T t, const T x, const T y,
+constexpr void gaussian(const T A, const T W, const T x_offset, const T t, const T x, const T y,
                         const T z, T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi) {
   using std::exp, std::pow, std::sqrt;
 
@@ -211,7 +211,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
             CCTK_REAL rho_int = (3.0*M)/((4.0*M_PI*pow(a_ext,3.0))*pow(1 + M/(2.0*a_ext),6.0));
             CCTK_REAL R2 = 3.0/(8.0*M_PI*rho_int);
             CCTK_REAL P_int = ( constA*( pow(constC,-2.0) - 2.0*r_square ) 
-                              + constB*(r_square*pow(constC,2.0) - 2.0) )/( 8.0*M_PI*R2*(constA*r_square + constB) )
+                              + constB*(r_square*pow(constC,2.0) - 2.0) )/( 8.0*M_PI*R2*(constA*r_square + constB) );
 
             phi_rhs(p.I) = mu(p.I);
             mu_rhs(p.I) = pow(1 + 2.0*alpha_int,-1.0)*( (1 - 2.0*alpha_int)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
