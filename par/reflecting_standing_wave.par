@@ -33,8 +33,8 @@ CarpetX::boundary_upper_x = "dirichlet"
 CarpetX::boundary_upper_y = "dirichlet"
 CarpetX::boundary_upper_z = "dirichlet"
 
-LightThroughDM::initial_condition = "Gaussian"
-LightThroughDM::boundary_condition = "standing wave"
+LightThroughDM::initial_condition = "standing wave"
+LightThroughDM::boundary_condition = "reflecting"
 
 # Physics parameters
 LightThroughDM::M = 0.001
