@@ -19,6 +19,7 @@ CCTK_REAL state TYPE=gf TAGS='rhs="rhs"'
   chi 
   Az
   psi
+  constraint_violation 
 } "Scalar wave state vector"
 
 CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
