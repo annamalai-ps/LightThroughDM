@@ -201,7 +201,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
                           - 4.0*M_PI*(rho_ext - P_ext)*Az(p.I) );
             // lorenz gauge
             constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + + d_alpha_ext[2]*Az(p.I) );    
+                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );    
             
           }
           else //interior
@@ -250,7 +250,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
                           - 4.0*M_PI*(rho_int - P_int)*Az(p.I) );
             // lorenz gauge 
             constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + + d_alpha_int[2]*Az(p.I) );
+                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
 
           }
         });
