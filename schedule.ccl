@@ -17,3 +17,11 @@ SCHEDULE LightThroughDM_RHS IN ODESolvers_RHS
   WRITES: rhs(interior)
   SYNC: rhs
 } "Calculate scalar wave RHS"
+
+SCHEDULE LightThroughDM_Constraint IN ODESolvers_PostStep
+{
+  LANG: C
+  READS: state(everywhere)
+  WRITES: constraint(interior)
+  SYNC: constraint
+} "Calculate constraint violation"

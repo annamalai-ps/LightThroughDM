@@ -31,5 +31,9 @@ CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
   chi_rhs 
   Az_rhs
   psi_rhs
-  constraint_violation
 } "RHS of scalar wave state vector"
+
+CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'
+{
+  constraint_violation
+} "constraint violation"

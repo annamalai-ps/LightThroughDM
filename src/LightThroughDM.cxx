@@ -196,10 +196,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
                           - 2.0*d_alpha_ext[2]*(-mu(p.I) + d_Ax[0] + d_Ay[1])
                           + 2.0*(d_alpha_ext[0]*d_Az[0] + d_alpha_ext[1]*d_Az[1] + d_alpha_ext[2]*d_Az[2])
                           - 4.0*M_PI*(rho_ext - P_ext)*Az(p.I) );
-            // lorenz gauge
-            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );    
-            
+
           }
           else //interior
           {
@@ -244,10 +241,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
                           + 2.0*(d_alpha_int[0]*d_Ax[2] + d_alpha_int[1]*d_Ay[2])
                           - 2.0*d_alpha_int[2]*(-mu(p.I) + d_Ax[0] + d_Ay[1])
                           + 2.0*(d_alpha_int[0]*d_Az[0] + d_alpha_int[1]*d_Az[1] + d_alpha_int[2]*d_Az[2])
-                          - 4.0*M_PI*(rho_int - P_int)*Az(p.I) );
-            // lorenz gauge 
-            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
+                          - 4.0*M_PI*(rho_int - P_int)*Az(p.I) );            
 
           }
         });
@@ -256,5 +250,64 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
     CCTK_ERROR("Specify proper boundary condition");
   }
 }
+
+extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Constraint;
+  grid.loop_int_device<0, 0, 0>(
+      grid.nghostzones,
+      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+          using std::pow, std::sqrt;
+
+          Arith::vect<CCTK_REAL, dim> d_phi;
+          Arith::vect<CCTK_REAL, dim> d_Ax;
+          Arith::vect<CCTK_REAL, dim> d_Ay;
+          Arith::vect<CCTK_REAL, dim> d_Az;
+          const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0); 
+
+          for (int d = 0; d < dim; ++d)
+          {
+            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
+            {
+              d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
+            }
+            else
+            {
+              d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
+                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
+                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
+                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
+                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+            }
+          }
+          if (sqrt(r_square) >= a_ext) // exterior
+          {
+            const CCTK_REAL alpha_ext = M / sqrt(r_square);
+            Arith::vect<CCTK_REAL, dim> d_alpha_ext;
+
+            for (int d = 0; d < dim; ++d) {
+              d_alpha_ext[d] = -(M*p.X[d]) / pow(r_square,1.5);
+            }
+        
+            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
+                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );
+          }
+          else //interior
+          {
+            const CCTK_REAL alpha_int = ( M / 2.0 * a_ext )*(3.0 - r_square/pow(a_ext, 2.0) );
+            Arith::vect<CCTK_REAL, dim> d_alpha_int;
+            for (int d = 0; d < dim; ++d)
+              d_alpha_int[d] = -(M*p.X[d]) / pow(a_ext, 3.0);
+            
+            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
+                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
+          }
+            
+
+      });
+}
+
 
 } // namespace LightThroughDM
