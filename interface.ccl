@@ -31,6 +31,8 @@ CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
   chi_rhs 
   Az_rhs
   psi_rhs
+  density
+  pressure
 } "RHS of scalar wave state vector"
 
 CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'

@@ -168,6 +168,8 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
 
             CCTK_REAL rho_ext = 0.0;
             CCTK_REAL P_ext = 0.0;
+            density(p.I) = rho_ext;
+            pressure(p.I) = P_ext;
 
             phi_rhs(p.I) = mu(p.I);
             mu_rhs(p.I) = pow(1 + 2.0*alpha_ext,-1.0)*( (1 - 2.0*alpha_ext)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
@@ -214,6 +216,8 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
             CCTK_REAL R2 = 3.0/(8.0*M_PI*rho_int);
             CCTK_REAL P_int = ( constA*( pow(constC,-2.0) - 2.0*r_square ) 
                               + constB*(r_square*pow(constC,2.0) - 2.0) )/( 8.0*M_PI*R2*(constA*r_square + constB) );
+            density(p.I) = rho_int;
+            pressure(p.I) = P_int;
 
             phi_rhs(p.I) = mu(p.I);
             mu_rhs(p.I) = pow(1 + 2.0*alpha_int,-1.0)*( (1 - 2.0*alpha_int)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
