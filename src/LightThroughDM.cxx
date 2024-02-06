@@ -18,7 +18,7 @@ constexpr int dim = 3;
 template <typename T>
 constexpr void standing_wave(const T A, const T kx, const T ky, const T kz,
                              const T t, const T x, const T y, const T z,
-                             T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi , T &CV) {
+                             T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi) {
   using std::acos, std::cos, std::pow, std::sin, std::sqrt;
 
   const T pi = acos(-T(1));
@@ -41,14 +41,13 @@ constexpr void standing_wave(const T A, const T kx, const T ky, const T kz,
   psi = A * (-2 * pi * omega) * sin(2 * pi * omega * t) * cos(2 * pi * kx * x) *
         cos(2 * pi * ky * y) * cos(2 * pi * kz * z);
 
-  CV = 0.0;
 }
 
 // u(t,r) = (f(t-r) - f(t+r)) / r
 // f(v) = A exp(-1/2 (r/W)^2)
 template <typename T>
 constexpr void gaussian(const T A, const T W, const T x_offset, const T t, const T x, const T y,
-                        const T z, T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi , T &CV) {
+                        const T z, T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi) {
   using std::exp, std::pow, std::sqrt;
 
   phi = A*exp(-( pow(x + x_offset,2.0) + pow(y,2.0) + pow(z,2.0)  )/(2.0*pow(W, 2)) );
@@ -60,8 +59,6 @@ constexpr void gaussian(const T A, const T W, const T x_offset, const T t, const
   nu = 0.0;
   chi = 0.0;
   psi = 0.0;
-
-  CV = 0.0;
   
 }
 
@@ -76,7 +73,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           standing_wave(amplitude, standing_wave_kx, standing_wave_ky,
                         standing_wave_kz, cctk_time, p.x, p.y, p.z, phi(p.I), mu(p.I),
-                    Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), constraint_violation(p.I));
+                    Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
         });
 
   } else if (CCTK_EQUALS(initial_condition, "Gaussian")) {
@@ -85,7 +82,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         grid.nghostzones,
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           gaussian(amplitude, gaussian_width, gaussian_x_offset, cctk_time, p.x, p.y, p.z,  phi(p.I), mu(p.I),
-                    Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), constraint_violation(p.I));
+                    Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
         });
 
   } else {
