@@ -253,6 +253,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
 
 extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Constraint;
+  DECLARE_CCTK_PARAMETERS;
   grid.loop_int_device<0, 0, 0>(
       grid.nghostzones,
       [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
