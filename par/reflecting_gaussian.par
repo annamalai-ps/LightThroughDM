@@ -52,11 +52,13 @@ IO::out_every = $out_every
 CarpetX::out_tsv_vars = "
     LightThroughDM::state
     LightThroughDM::rhs
+    LightThroughDM::constraint
 "
 
 CarpetX::out_silo_vars = "
     LightThroughDM::state
     LightThroughDM::rhs
+    LightThroughDM::constraint
 "
 
 TimerReport::out_every = $out_every
