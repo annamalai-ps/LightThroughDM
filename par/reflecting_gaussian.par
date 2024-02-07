@@ -46,7 +46,7 @@ LightThroughDM::amplitude = 0.5
 LightThroughDM::gaussian_x_offset = 0.5
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.1
+CarpetX::dtfac = 0.05
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
