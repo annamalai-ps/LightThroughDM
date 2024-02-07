@@ -21,9 +21,9 @@ CarpetX::ncells_z = $ncells
 CarpetX::max_num_levels = $nlevels
 
 # Cactus::terminate = "time"
-# Cactus::cctk_final_time = 1.0
+Cactus::cctk_final_time = 0.2
 
-Cactus::cctk_itlast = 50
+#Cactus::cctk_itlast = 50
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2
@@ -40,13 +40,13 @@ LightThroughDM::boundary_condition = "reflecting"
 
 # Physics parameters
 LightThroughDM::M = 1e-6
-LightThroughDM::a_ext = 0.1
+LightThroughDM::a_ext = 0.2
 LightThroughDM::gaussian_width = 0.05
 LightThroughDM::amplitude = 0.5
 LightThroughDM::gaussian_x_offset = 0.5
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.05
+CarpetX::dtfac = 0.1
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
