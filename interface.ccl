@@ -21,6 +21,12 @@ CCTK_REAL state TYPE=gf TAGS='rhs="rhs"'
   psi 
 } "Scalar wave state vector"
 
+CCTK_REAL density_pressure TYPE=gf
+{
+  density
+  pressure 
+} "density and pressure functions"
+
 CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
 {
   phi_rhs
