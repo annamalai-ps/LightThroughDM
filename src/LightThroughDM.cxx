@@ -86,7 +86,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
           using std::pow, std::sqrt;
           const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0); 
 
-          if (sqrt(r_square) >= a_ext) // exterior
+          if (r_square >= a_ext*a_ext) // exterior
           {
             density(p.I) = 0.0;
             pressure(p.I) = 0.0;
@@ -172,7 +172,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
 
             }
           }
-          if (sqrt(r_square) >= a_ext) // exterior
+          if (r_square >= a_ext*a_ext) // exterior
           {
             const CCTK_REAL alpha_ext = M / sqrt(r_square);
             Arith::vect<CCTK_REAL, dim> d_alpha_ext;
@@ -289,7 +289,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
                        - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
             }
           }
-          if (sqrt(r_square) >= a_ext) // exterior
+          if (r_square >= a_ext*a_ext) // exterior
           {
             // const CCTK_REAL alpha_ext = M / sqrt(r_square);
             Arith::vect<CCTK_REAL, dim> d_alpha_ext;
