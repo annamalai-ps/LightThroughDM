@@ -65,80 +65,31 @@ constexpr void gaussian(const T A, const T W, const T x_offset, const T t, const
 extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Initial;
   DECLARE_CCTK_PARAMETERS;
-
-  if (CCTK_EQUALS(initial_condition, "standing wave")) {
     
     grid.loop_int_device<0, 0, 0>(
         grid.nghostzones,
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-          standing_wave(amplitude, standing_wave_kx, standing_wave_ky,
-                        standing_wave_kz, cctk_time, p.x, p.y, p.z, phi(p.I), mu(p.I),
+          
+          if (CCTK_EQUALS(initial_condition, "standing wave")) {
+            standing_wave(amplitude, standing_wave_kx, standing_wave_ky,
+                          standing_wave_kz, cctk_time, p.x, p.y, p.z, phi(p.I), mu(p.I),
+                          Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
+          }
+          else if (CCTK_EQUALS(initial_condition, "Gaussian")) {
+            gaussian(amplitude, gaussian_width, gaussian_x_offset, cctk_time, p.x, p.y, p.z,  phi(p.I), mu(p.I),
                     Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
-        });
-
-  } else if (CCTK_EQUALS(initial_condition, "Gaussian")) {
-
-    grid.loop_int_device<0, 0, 0>(
-        grid.nghostzones,
-        [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-          gaussian(amplitude, gaussian_width, gaussian_x_offset, cctk_time, p.x, p.y, p.z,  phi(p.I), mu(p.I),
-                    Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
-        });
-
-  } else {
-    CCTK_ERROR("Unknown initial condition");
-  }
-}
-
-
-extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
-  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Constraint;
-  DECLARE_CCTK_PARAMETERS;
-  grid.loop_int_device<0, 0, 0>(
-      grid.nghostzones,
-      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+          }
+          else {
+            CCTK_ERROR("Unknown initial condition");
+          }
+    
           using std::pow, std::sqrt;
-
-          Arith::vect<CCTK_REAL, dim> d_phi;
-          Arith::vect<CCTK_REAL, dim> d_Ax;
-          Arith::vect<CCTK_REAL, dim> d_Ay;
-          Arith::vect<CCTK_REAL, dim> d_Az;
           const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0); 
 
-          for (int d = 0; d < dim; ++d)
-          {
-            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
-            {
-              d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
-            }
-            else
-            {
-              d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
-                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-              d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
-                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-              d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
-                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-              d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
-                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-            }
-          }
           if (sqrt(r_square) >= a_ext) // exterior
           {
-            CCTK_REAL rho_ext = 0.0;
-            CCTK_REAL P_ext = 0.0;
-            density(p.I) = rho_ext;
-            pressure(p.I) = P_ext;
-
-            const CCTK_REAL alpha_ext = M / sqrt(r_square);
-            Arith::vect<CCTK_REAL, dim> d_alpha_ext;
-
-            for (int d = 0; d < dim; ++d) {
-              d_alpha_ext[d] = -(M*p.X[d]) / pow(r_square,1.5);
-            }
-        
-            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );
+            density(p.I) = 0.0;
+            pressure(p.I) = 0.0;
           }
           else //interior
           {
@@ -151,18 +102,8 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
                               + constB*(r_square*pow(constC,2.0) - 2.0) )/( 8.0*M_PI*R2*(constA*r_square + constB) );
             density(p.I) = rho_int;
             pressure(p.I) = P_int;
-            
-            const CCTK_REAL alpha_int = ( M / 2.0 * a_ext )*(3.0 - r_square/pow(a_ext, 2.0) );
-            Arith::vect<CCTK_REAL, dim> d_alpha_int;
-            for (int d = 0; d < dim; ++d)
-              d_alpha_int[d] = -(M*p.X[d]) / pow(a_ext, 3.0);
-            
-            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
           }
-            
-
-      });
+        });  
 }
 
 
@@ -242,7 +183,6 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
               dd_alpha_ext[d] = M*((3.0*pow(p.X[d], 2.0)) / pow(r_square,2.5) - 1.0/pow(r_square,1.5)); 
             }
 
-
             phi_rhs(p.I) = mu(p.I);
             mu_rhs(p.I) = pow(1 + 2.0*alpha_ext,-1.0)*( (1 - 2.0*alpha_ext)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
                           -phi(p.I)*(dd_alpha_ext[0] + dd_alpha_ext[1] + dd_alpha_ext[2])
@@ -315,6 +255,65 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
   } else {
     CCTK_ERROR("Specify proper boundary condition");
   }
+}
+
+extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Constraint;
+  DECLARE_CCTK_PARAMETERS;
+  grid.loop_int_device<0, 0, 0>(
+      grid.nghostzones,
+      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+          using std::pow, std::sqrt;
+
+          Arith::vect<CCTK_REAL, dim> d_phi;
+          Arith::vect<CCTK_REAL, dim> d_Ax;
+          Arith::vect<CCTK_REAL, dim> d_Ay;
+          Arith::vect<CCTK_REAL, dim> d_Az;
+          const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0); 
+
+          for (int d = 0; d < dim; ++d)
+          {
+            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
+            {
+              d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
+            }
+            else
+            {
+              d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
+                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
+                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
+                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
+                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+            }
+          }
+          if (sqrt(r_square) >= a_ext) // exterior
+          {
+            // const CCTK_REAL alpha_ext = M / sqrt(r_square);
+            Arith::vect<CCTK_REAL, dim> d_alpha_ext;
+
+            for (int d = 0; d < dim; ++d) {
+              d_alpha_ext[d] = -(M*p.X[d]) / pow(r_square,1.5);
+            }
+        
+            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
+                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );
+          }
+          else //interior
+          {            
+            // const CCTK_REAL alpha_int = ( M / 2.0 * a_ext )*(3.0 - r_square/pow(a_ext, 2.0) );
+            Arith::vect<CCTK_REAL, dim> d_alpha_int;
+            for (int d = 0; d < dim; ++d)
+              d_alpha_int[d] = -(M*p.X[d]) / pow(a_ext, 3.0);
+            
+            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
+                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
+          }
+            
+
+      });
 }
 
 

@@ -36,6 +36,4 @@ CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
 CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'
 {
   constraint_violation
-  density
-  pressure
 } "constraint violation"

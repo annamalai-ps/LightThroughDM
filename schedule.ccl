@@ -5,8 +5,8 @@ STORAGE: state
 SCHEDULE LightThroughDM_Initial AT initial
 {
   LANG: C
-  WRITES: state(interior)
-  SYNC: state
+  WRITES: state(interior) density(interior) pressure(interior)
+  SYNC: state density pressure
 } "Initialize scalar wave state"
 
 SCHEDULE LightThroughDM_Constraint AT postinitial
@@ -15,13 +15,21 @@ SCHEDULE LightThroughDM_Constraint AT postinitial
   READS: state(everywhere)
   WRITES: constraint(interior)
   SYNC: constraint
-} "Calculate constraint violation"
+} "Calculate constraint violation postinitial"
 
 
 SCHEDULE LightThroughDM_RHS IN ODESolvers_RHS
 {
   LANG: C
-  READS: state(everywhere) constraint(interior)
+  READS: state(everywhere) density(interior) pressure(interior)
   WRITES: rhs(interior) state(interior)
   SYNC: rhs
 } "Calculate scalar wave RHS"
+
+SCHEDULE LightThroughDM_Constraint IN ODESolvers_PostStep
+{
+  LANG: C
+  READS: state(everywhere)
+  WRITES: constraint(interior)
+  SYNC: constraint
+} "Calculate constraint violation after a time step"
