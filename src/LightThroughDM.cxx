@@ -90,6 +90,82 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
   }
 }
 
+
+extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Constraint;
+  DECLARE_CCTK_PARAMETERS;
+  grid.loop_int_device<0, 0, 0>(
+      grid.nghostzones,
+      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+          using std::pow, std::sqrt;
+
+          Arith::vect<CCTK_REAL, dim> d_phi;
+          Arith::vect<CCTK_REAL, dim> d_Ax;
+          Arith::vect<CCTK_REAL, dim> d_Ay;
+          Arith::vect<CCTK_REAL, dim> d_Az;
+          const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0); 
+
+          for (int d = 0; d < dim; ++d)
+          {
+            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
+            {
+              d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
+            }
+            else
+            {
+              d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
+                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
+                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
+                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+              d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
+                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+            }
+          }
+          if (sqrt(r_square) >= a_ext) // exterior
+          {
+            CCTK_REAL rho_ext = 0.0;
+            CCTK_REAL P_ext = 0.0;
+            density(p.I) = rho_ext;
+            pressure(p.I) = P_ext;
+
+            const CCTK_REAL alpha_ext = M / sqrt(r_square);
+            Arith::vect<CCTK_REAL, dim> d_alpha_ext;
+
+            for (int d = 0; d < dim; ++d) {
+              d_alpha_ext[d] = -(M*p.X[d]) / pow(r_square,1.5);
+            }
+        
+            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
+                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );
+          }
+          else //interior
+          {
+            CCTK_REAL constC = sqrt(M/(2.0*pow(a_ext,3.0)));
+            CCTK_REAL constA = constC*(4.0*a_ext - M)/(2.0*a_ext + M);
+            CCTK_REAL constB = (1.0/constC)*(2.0*a_ext - 2.0*M)/(2.0*a_ext + M);
+            CCTK_REAL rho_int = (3.0*M)/((4.0*M_PI*pow(a_ext,3.0))*pow(1 + M/(2.0*a_ext),6.0));
+            CCTK_REAL R2 = 3.0/(8.0*M_PI*rho_int);
+            CCTK_REAL P_int = ( constA*( pow(constC,-2.0) - 2.0*r_square ) 
+                              + constB*(r_square*pow(constC,2.0) - 2.0) )/( 8.0*M_PI*R2*(constA*r_square + constB) );
+            density(p.I) = rho_int;
+            pressure(p.I) = P_int;
+            
+            const CCTK_REAL alpha_int = ( M / 2.0 * a_ext )*(3.0 - r_square/pow(a_ext, 2.0) );
+            Arith::vect<CCTK_REAL, dim> d_alpha_int;
+            for (int d = 0; d < dim; ++d)
+              d_alpha_int[d] = -(M*p.X[d]) / pow(a_ext, 3.0);
+            
+            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
+                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
+          }
+            
+
+      });
+}
+
+
 extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_RHS;
   DECLARE_CCTK_PARAMETERS;
@@ -166,38 +242,34 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
               dd_alpha_ext[d] = M*((3.0*pow(p.X[d], 2.0)) / pow(r_square,2.5) - 1.0/pow(r_square,1.5)); 
             }
 
-            CCTK_REAL rho_ext = 0.0;
-            CCTK_REAL P_ext = 0.0;
-            density(p.I) = rho_ext;
-            pressure(p.I) = P_ext;
 
             phi_rhs(p.I) = mu(p.I);
             mu_rhs(p.I) = pow(1 + 2.0*alpha_ext,-1.0)*( (1 - 2.0*alpha_ext)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
                           -phi(p.I)*(dd_alpha_ext[0] + dd_alpha_ext[1] + dd_alpha_ext[2])
                           + 2.0*(d_alpha_ext[0]*nu(p.I) + d_alpha_ext[1]*chi(p.I) + d_alpha_ext[2]*psi(p.I))
                           - 2.0*(d_alpha_ext[0]*d_phi[0] + d_alpha_ext[1]*d_phi[1] + d_alpha_ext[2]*d_phi[2])
-                          + 4.0*M_PI*(rho_ext + 3.0*P_ext)*phi(p.I) );
+                          + 4.0*M_PI*(density(p.I) + 3.0*pressure(p.I))*phi(p.I) );
             Ax_rhs(p.I) = nu(p.I);
             nu_rhs(p.I) = pow(1 + 2.0*alpha_ext,-1.0)*( (1 - 2.0*alpha_ext)*(dd_Ax[0] + dd_Ax[1] + dd_Ax[2])
                           +Ax(p.I)*(dd_alpha_ext[0] + dd_alpha_ext[1] + dd_alpha_ext[2])
                           + 2.0*(d_alpha_ext[2]*d_Az[0] + d_alpha_ext[1]*d_Ay[0])
                           - 2.0*d_alpha_ext[0]*(-mu(p.I) + d_Ay[1] + d_Az[2])
                           + 2.0*(d_alpha_ext[0]*d_Ax[0] + d_alpha_ext[1]*d_Ax[1] + d_alpha_ext[2]*d_Ax[2])
-                          - 4.0*M_PI*(rho_ext - P_ext)*Ax(p.I) );
+                          - 4.0*M_PI*(density(p.I) - pressure(p.I))*Ax(p.I) );
             Ay_rhs(p.I) = chi(p.I);
             chi_rhs(p.I) = pow(1 + 2.0*alpha_ext,-1.0)*( (1 - 2.0*alpha_ext)*(dd_Ay[0] + dd_Ay[1] + dd_Ay[2])
                           +Ay(p.I)*(dd_alpha_ext[0] + dd_alpha_ext[1] + dd_alpha_ext[2])
                           + 2.0*(d_alpha_ext[0]*d_Ax[1] + d_alpha_ext[2]*d_Az[1])
                           - 2.0*d_alpha_ext[1]*(-mu(p.I) + d_Ax[0] + d_Az[2])
                           + 2.0*(d_alpha_ext[0]*d_Ay[0] + d_alpha_ext[1]*d_Ay[1] + d_alpha_ext[2]*d_Ay[2])
-                          - 4.0*M_PI*(rho_ext - P_ext)*Ay(p.I) );  
+                          - 4.0*M_PI*(density(p.I) - pressure(p.I))*Ay(p.I) );  
             Ax_rhs(p.I) = psi(p.I);
             psi_rhs(p.I) = pow(1 + 2.0*alpha_ext,-1.0)*( (1 - 2.0*alpha_ext)*(dd_Az[0] + dd_Az[1] + dd_Az[2])
                           +Az(p.I)*(dd_alpha_ext[0] + dd_alpha_ext[1] + dd_alpha_ext[2])
                           + 2.0*(d_alpha_ext[0]*d_Ax[2] + d_alpha_ext[1]*d_Ay[2])
                           - 2.0*d_alpha_ext[2]*(-mu(p.I) + d_Ax[0] + d_Ay[1])
                           + 2.0*(d_alpha_ext[0]*d_Az[0] + d_alpha_ext[1]*d_Az[1] + d_alpha_ext[2]*d_Az[2])
-                          - 4.0*M_PI*(rho_ext - P_ext)*Az(p.I) );
+                          - 4.0*M_PI*(density(p.I) - pressure(p.I))*Az(p.I) );
 
           }
           else //interior
@@ -209,43 +281,33 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
             for (int d = 0; d < dim; ++d)
               d_alpha_int[d] = -(M*p.X[d]) / pow(a_ext, 3.0);
 
-            CCTK_REAL constC = sqrt(M/(2.0*pow(a_ext,3.0)));
-            CCTK_REAL constA = constC*(4.0*a_ext - M)/(2.0*a_ext + M);
-            CCTK_REAL constB = (1.0/constC)*(2.0*a_ext - 2.0*M)/(2.0*a_ext + M);
-            CCTK_REAL rho_int = (3.0*M)/((4.0*M_PI*pow(a_ext,3.0))*pow(1 + M/(2.0*a_ext),6.0));
-            CCTK_REAL R2 = 3.0/(8.0*M_PI*rho_int);
-            CCTK_REAL P_int = ( constA*( pow(constC,-2.0) - 2.0*r_square ) 
-                              + constB*(r_square*pow(constC,2.0) - 2.0) )/( 8.0*M_PI*R2*(constA*r_square + constB) );
-            density(p.I) = rho_int;
-            pressure(p.I) = P_int;
-
             phi_rhs(p.I) = mu(p.I);
             mu_rhs(p.I) = pow(1 + 2.0*alpha_int,-1.0)*( (1 - 2.0*alpha_int)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
                           -phi(p.I)*(3*dd_alpha_int)
                           + 2.0*(d_alpha_int[0]*nu(p.I) + d_alpha_int[1]*chi(p.I) + d_alpha_int[2]*psi(p.I))
                           - 2.0*(d_alpha_int[0]*d_phi[0] + d_alpha_int[1]*d_phi[1] + d_alpha_int[2]*d_phi[2])
-                          + 4.0*M_PI*(rho_int + 3.0*P_int)*phi(p.I) );
+                          + 4.0*M_PI*(density(p.I) + 3.0*pressure(p.I))*phi(p.I) );
             Ax_rhs(p.I) = nu(p.I);
             nu_rhs(p.I) = pow(1 + 2.0*alpha_int,-1.0)*( (1 - 2.0*alpha_int)*(dd_Ax[0] + dd_Ax[1] + dd_Ax[2])
                           +Ax(p.I)*(3*dd_alpha_int)
                           + 2.0*(d_alpha_int[2]*d_Az[0] + d_alpha_int[1]*d_Ay[0])
                           - 2.0*d_alpha_int[0]*(-mu(p.I) + d_Ay[1] + d_Az[2])
                           + 2.0*(d_alpha_int[0]*d_Ax[0] + d_alpha_int[1]*d_Ax[1] + d_alpha_int[2]*d_Ax[2])
-                          - 4.0*M_PI*(rho_int - P_int)*Ax(p.I) );
+                          - 4.0*M_PI*(density(p.I) - pressure(p.I))*Ax(p.I) );
             Ay_rhs(p.I) = chi(p.I);
             chi_rhs(p.I) = pow(1 + 2.0*alpha_int,-1.0)*( (1 - 2.0*alpha_int)*(dd_Ay[0] + dd_Ay[1] + dd_Ay[2])
                           +Ay(p.I)*(3*dd_alpha_int)
                           + 2.0*(d_alpha_int[0]*d_Ax[1] + d_alpha_int[2]*d_Az[1])
                           - 2.0*d_alpha_int[1]*(-mu(p.I) + d_Ax[0] + d_Az[2])
                           + 2.0*(d_alpha_int[0]*d_Ay[0] + d_alpha_int[1]*d_Ay[1] + d_alpha_int[2]*d_Ay[2])
-                          - 4.0*M_PI*(rho_int - P_int)*Ay(p.I) );  
+                          - 4.0*M_PI*(density(p.I) - pressure(p.I))*Ay(p.I) );  
             Ax_rhs(p.I) = psi(p.I);
             psi_rhs(p.I) = pow(1 + 2.0*alpha_int,-1.0)*( (1 - 2.0*alpha_int)*(dd_Az[0] + dd_Az[1] + dd_Az[2])
                           +Az(p.I)*(3*dd_alpha_int)
                           + 2.0*(d_alpha_int[0]*d_Ax[2] + d_alpha_int[1]*d_Ay[2])
                           - 2.0*d_alpha_int[2]*(-mu(p.I) + d_Ax[0] + d_Ay[1])
                           + 2.0*(d_alpha_int[0]*d_Az[0] + d_alpha_int[1]*d_Az[1] + d_alpha_int[2]*d_Az[2])
-                          - 4.0*M_PI*(rho_int - P_int)*Az(p.I) );            
+                          - 4.0*M_PI*(density(p.I) - pressure(p.I))*Az(p.I) );            
 
           }
         });
@@ -255,64 +317,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
   }
 }
 
-extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
-  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Constraint;
-  DECLARE_CCTK_PARAMETERS;
-  grid.loop_int_device<0, 0, 0>(
-      grid.nghostzones,
-      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-          using std::pow, std::sqrt;
 
-          Arith::vect<CCTK_REAL, dim> d_phi;
-          Arith::vect<CCTK_REAL, dim> d_Ax;
-          Arith::vect<CCTK_REAL, dim> d_Ay;
-          Arith::vect<CCTK_REAL, dim> d_Az;
-          const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0); 
-
-          for (int d = 0; d < dim; ++d)
-          {
-            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
-            {
-              d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
-            }
-            else
-            {
-              d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
-                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-              d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
-                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-              d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
-                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-              d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
-                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
-            }
-          }
-          if (sqrt(r_square) >= a_ext) // exterior
-          {
-            const CCTK_REAL alpha_ext = M / sqrt(r_square);
-            Arith::vect<CCTK_REAL, dim> d_alpha_ext;
-
-            for (int d = 0; d < dim; ++d) {
-              d_alpha_ext[d] = -(M*p.X[d]) / pow(r_square,1.5);
-            }
-        
-            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );
-          }
-          else //interior
-          {
-            const CCTK_REAL alpha_int = ( M / 2.0 * a_ext )*(3.0 - r_square/pow(a_ext, 2.0) );
-            Arith::vect<CCTK_REAL, dim> d_alpha_int;
-            for (int d = 0; d < dim; ++d)
-              d_alpha_int[d] = -(M*p.X[d]) / pow(a_ext, 3.0);
-            
-            constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
-                                        + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
-          }
-            
-
-      });
-}
 
 
 } // namespace LightThroughDM
