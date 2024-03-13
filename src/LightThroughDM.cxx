@@ -13,6 +13,40 @@ namespace LightThroughDM {
 
 constexpr int dim = 3;
 
+
+
+template <typename T>
+constexpr void plane_wave(const T M, const T a_ext, const T A, const T kx, const T ky, const T kz,
+                             const T t, const T x, const T y, const T z,
+                             T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi) {
+  using std::acos, std::cos, std::pow, std::sin, std::sqrt;
+
+  const T pi = acos(-T(1));
+  const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
+  const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
+  const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
+  
+  Ax = A*cos(2*pi*omega*(z + t));
+  nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
+  Ay = A*sin(2*pi*omega*(z + t));
+  chi = 2.0*A*pi*omega*cos(2*pi*omega*(z + t));
+  Az = 0;
+  psi = 0;
+
+
+  if (r_square >= a_ext*a_ext) // exterior
+  {
+    phi = M*A*r_inv_cubed*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );
+    mu = 2.0*M*A*r_inv_cubed*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  );
+  }
+  else //interior
+  {
+    phi = M*A*pow(a_ext,-3.0)*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );
+    mu = 2.0*M*A*pow(a_ext,-3.0)*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  );
+  }
+
+}
+
 // u(t,x,y,z) =
 //   A cos(2 pi omega t) sin(2 pi kx x) sin(2 pi ky y) sin(2 pi kz z)
 template <typename T>
@@ -70,7 +104,12 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         grid.nghostzones,
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           
-          if (CCTK_EQUALS(initial_condition, "standing wave")) {
+          if (CCTK_EQUALS(initial_condition, "plane wave")) {
+            plane_wave(M, a_ext, amplitude, standing_wave_kx, standing_wave_ky,
+                          standing_wave_kz, cctk_time, p.x, p.y, p.z, phi(p.I), mu(p.I),
+                          Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
+          }
+          else if(CCTK_EQUALS(initial_condition, "standing wave")) {
             standing_wave(amplitude, standing_wave_kx, standing_wave_ky,
                           standing_wave_kz, cctk_time, p.x, p.y, p.z, phi(p.I), mu(p.I),
                           Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));

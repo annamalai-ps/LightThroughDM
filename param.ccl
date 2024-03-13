@@ -4,7 +4,8 @@ KEYWORD initial_condition "Initial condition"
 {
   "standing wave" :: "Standing wave"
   "Gaussian" :: "Gaussian"
-} "standing wave"
+  "plane wave" :: "plane wave"
+} "plane wave"
 
 CCTK_REAL amplitude "Initial amplitude"
 {
