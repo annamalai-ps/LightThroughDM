@@ -33,7 +33,6 @@ constexpr void plane_wave(const T M, const T a_ext, const T A, const T kx, const
   Az = 0;
   psi = 0;
 
-
   if (r_square >= a_ext*a_ext) // exterior
   {
     phi = M*A*r_inv_cubed*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );

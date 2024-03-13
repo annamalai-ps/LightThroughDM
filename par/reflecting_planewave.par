@@ -35,7 +35,7 @@ CarpetX::boundary_upper_x = "dirichlet"
 CarpetX::boundary_upper_y = "dirichlet"
 CarpetX::boundary_upper_z = "dirichlet"
 
-LightThroughDM::initial_condition = "plane wave"
+#LightThroughDM::initial_condition = "plane wave"
 LightThroughDM::boundary_condition = "reflecting"
 
 # Physics parameters
