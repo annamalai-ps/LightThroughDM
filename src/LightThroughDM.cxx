@@ -194,13 +194,13 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
             else
             {
               d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
-                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + phi(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
-                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + Ax(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
-                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + Ay(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
-                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + Az(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
 
               dd_phi[d] = ( -phi(p.I + 2*p.DI[d]) + 16.0*phi(p.I + p.DI[d]) - 30.0*phi(p.I) + 
                         16.0*phi(p.I - p.DI[d]) - phi(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
@@ -321,13 +321,13 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
             else
             {
               d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
-                       - phi(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + phi(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
-                       - Ax(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + Ax(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Ay[d] = (-Ay(p.I + 2*p.DI[d]) + 8.0*Ay(p.I + p.DI[d]) -8.0*Ay(p.I - p.DI[d])
-                       - Ay(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + Ay(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
-                       - Az(p.I - 2*p.DI[d])  )/(12.0*pow(p.DX[d], 2.0));
+                       + Az(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
             }
           }
           if (r_square >= a_ext*a_ext) // exterior
