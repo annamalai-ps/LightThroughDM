@@ -98,6 +98,8 @@ constexpr void gaussian(const T A, const T W, const T x_offset, const T t, const
 extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Initial;
   DECLARE_CCTK_PARAMETERS;
+
+  std::cout<<"\n"<<"Plane wave initialised"<<"\n";
     
     grid.loop_int_device<0, 0, 0>(
         grid.nghostzones,
@@ -107,7 +109,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
             plane_wave(M, a_ext, amplitude, standing_wave_kx, standing_wave_ky,
                           standing_wave_kz, cctk_time, p.x, p.y, p.z, phi(p.I), mu(p.I),
                           Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I));
-            std::cout<<"\n"<<"Plane wave initialised"<<"\n";
+            
           }
           else if(CCTK_EQUALS(initial_condition, "standing wave")) {
             standing_wave(amplitude, standing_wave_kx, standing_wave_ky,
@@ -339,7 +341,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
         
             constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
                                         + 2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) );
-            std::cout<<"\n"<<"Exterior: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"), t1 ="<<(mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2]);
+            std::cout<<"\n"<<"Exterior: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),mu ="<<mu(p.I)<<" ,del_i A^i ="<<(d_Ax[0] + d_Ay[1] + d_Az[2])<<", t1 ="<<(mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2]);
             std::cout<<"\n"<<"t2 ="<<(2.0*(d_alpha_ext[0]*Ax(p.I) + d_alpha_ext[1]*Ay(p.I) + d_alpha_ext[2]*Az(p.I) ));
           }
           else //interior
@@ -351,7 +353,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
             
             constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
                                         + 2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) );
-            std::cout<<"\n"<<"Interior: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"), t1 ="<<(mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2]);
+            std::cout<<"\n"<<"Interior: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),mu ="<<mu(p.I)<<" ,del_i A^i ="<<(d_Ax[0] + d_Ay[1] + d_Az[2])<<", t1 ="<<(mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2]);
             std::cout<<"\n"<<"t2 ="<<(2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) ));
           }
             
