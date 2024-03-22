@@ -13,7 +13,7 @@ SCHEDULE LightThroughDM_Constraint AT postinitial
 {
   LANG: C
   READS: state(everywhere)
-  WRITES: constraint(interior)
+  WRITES: constraint(everywhere)
   SYNC: constraint
 } "Calculate constraint violation postinitial"
 
@@ -30,6 +30,6 @@ SCHEDULE LightThroughDM_Constraint IN ODESolvers_PostStep
 {
   LANG: C
   READS: state(everywhere)
-  WRITES: constraint(interior)
+  WRITES: constraint(everywhere)
   SYNC: constraint
 } "Calculate constraint violation after a time step"
