@@ -316,6 +316,8 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
           {
             if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
             {
+              // set constraint to zero as well at boundaries
+              constraint_violation(p.I) = 0;
               //d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
               //std::cout<<"\n"<<"Boundary: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),phi ="<<phi(p.I)<<" ,Ax = "<<Ax(p.I)<<" ,Ay = "<<Ay(p.I)<<" ,Az = "<<Az(p.I);
             }
