@@ -13,7 +13,7 @@ SCHEDULE LightThroughDM_Constraint AT postinitial
 {
   LANG: C
   READS: state(everywhere)
-  WRITES: constraint(everywhere)
+  WRITES: constraint(interior)
   SYNC: constraint
 } "Calculate constraint violation postinitial"
 
