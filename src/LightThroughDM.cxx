@@ -317,7 +317,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
             if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
             {
               // set constraint to zero as well at boundaries
-              constraint_violation(p.I) = 0;
+              //constraint_violation(p.I) = 0; //does not work
               //d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
               //std::cout<<"\n"<<"Boundary: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),phi ="<<phi(p.I)<<" ,Ax = "<<Ax(p.I)<<" ,Ay = "<<Ay(p.I)<<" ,Az = "<<Az(p.I);
             }
@@ -360,6 +360,11 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
             //std::cout<<"\n"<<"Interior: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),mu ="<<mu(p.I)<<" ,del_i A^i ="<<(d_Ax[0] + d_Ay[1] + d_Az[2])<<" ,dx_Ax="<<d_Ax[0]<<" ,dy_Ay="<<d_Ay[1]<<" ,dz_Az="<<d_Az[2];
             //std::cout<<", t1 ="<<(mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2]);
             //std::cout<<"\n"<<"t2 ="<<(2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) ));
+          }
+          if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
+          {
+          // set constraint to zero as well at boundaries
+          constraint_violation(p.I) = 0; //does not work
           }
             
 
