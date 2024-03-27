@@ -196,13 +196,13 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
 
           for (int d = 0; d < dim; ++d)
           {
-            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
-            {
-              d_phi[d] = 0.0, d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
-              dd_phi[d] = 0.0, dd_Ax[d] = 0.0, dd_Ay[d] = 0.0, dd_Az[d] = 0.0;
-            }
-            else
-            {
+            //if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
+            //{
+            //  d_phi[d] = 0.0, d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
+            //  dd_phi[d] = 0.0, dd_Ax[d] = 0.0, dd_Ay[d] = 0.0, dd_Az[d] = 0.0;
+            //}
+            //else
+            //{
               d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
                        + phi(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
@@ -221,7 +221,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
               dd_Az[d] = ( -Az(p.I + 2*p.DI[d]) + 16.0*Az(p.I + p.DI[d]) - 30.0*Az(p.I) + 
                         16.0*Az(p.I - p.DI[d]) - Az(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
 
-            }
+            //}
           }
           if (r_square >= a_ext*a_ext) // exterior
           {
@@ -324,13 +324,13 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
 
           for (int d = 0; d < dim; ++d)
           {
-            if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
-            {
+            //if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
+            //{
               //d_phi[d] =0.0, d_Ax[d] = 0.0, d_Ay[d] = 0.0, d_Az[d] = 0.0;
               //std::cout<<"\n"<<"Boundary: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),phi ="<<phi(p.I)<<" ,Ax = "<<Ax(p.I)<<" ,Ay = "<<Ay(p.I)<<" ,Az = "<<Az(p.I);
-            }
-            else
-            {
+            //}
+            //else
+            //{
               d_phi[d] = (-phi(p.I + 2*p.DI[d]) + 8.0*phi(p.I + p.DI[d]) -8.0*phi(p.I - p.DI[d])
                        + phi(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Ax[d] = (-Ax(p.I + 2*p.DI[d]) + 8.0*Ax(p.I + p.DI[d]) -8.0*Ax(p.I - p.DI[d])
@@ -339,7 +339,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
                        + Ay(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
               d_Az[d] = (-Az(p.I + 2*p.DI[d]) + 8.0*Az(p.I + p.DI[d]) -8.0*Az(p.I - p.DI[d])
                        + Az(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
-            }
+            //}
           }
           if (r_square >= a_ext*a_ext) // exterior
           {
