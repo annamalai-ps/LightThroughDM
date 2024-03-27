@@ -40,9 +40,8 @@ CCTK_REAL gaussian_x_offset "x-offset for gaussian wave"
 KEYWORD boundary_condition "Boundary condition"
 {
   "CarpetX" :: "Apply boundary conditions via CarpetX"
-  "reflecting" :: "Apply a reflecting boundary condition"
-  "radiative" :: "Apply a radiative boundary condition"
-} "reflecting"
+  "periodic" :: "Apply a reflecting boundary condition"
+} "periodic"
 
 CCTK_REAL M "Mass of dark matter particle"
 {

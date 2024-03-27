@@ -19,7 +19,19 @@ CCTK_REAL state TYPE=gf TAGS='rhs="rhs"'
   chi 
   Az
   psi 
-} "Scalar wave state vector"
+} "state vector"
+
+CCTK_REAL state_flat TYPE=gf TAGS='rhs="rhs_flat"'
+{
+  phi_flat
+  mu_flat
+  Ax_flat
+  nu_flat
+  Ay_flat
+  chi_flat
+  Az_flat
+  psi_flat
+} "flat state vector"
 
 CCTK_REAL density_pressure TYPE=gf
 {
@@ -37,9 +49,22 @@ CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
   chi_rhs 
   Az_rhs
   psi_rhs
-} "RHS of scalar wave state vector"
+} "RHS of state vector"
+
+CCTK_REAL rhs_flat TYPE=gf TAGS='checkpoint="no"'
+{
+  phi_flat_rhs
+  mu_flat_rhs
+  Ax_flat_rhs
+  nu_flat_rhs
+  Ay_flat_rhs
+  chi_flat_rhs
+  Az_flat_rhs
+  psi_flat_rhs
+} "RHS of flat state vector"
 
 CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'
 {
   constraint_violation
+  constraint_violation_flat
 } "constraint violation"
