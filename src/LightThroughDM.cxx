@@ -29,7 +29,7 @@ constexpr void plane_wave(const T M, const T a_ext, const T A, const T kx, const
   const T n1 = 27;
   const T n2 = 35; // wave numbers between two full waves
 
-  if (z >= (n1/4.0*omega) && z <= (n2/4.0*omega) )
+  if (z >= (n1/(4.0*omega)) && z <= (n2/(4.0*omega)) )
   {
     Ax = A*cos(2*pi*omega*(z + t));
     nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
