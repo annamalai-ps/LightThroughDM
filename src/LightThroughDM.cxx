@@ -25,23 +25,33 @@ constexpr void plane_wave(const T M, const T a_ext, const T A, const T kx, const
   const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
-  
-  Ax = A*cos(2*pi*omega*(z + t));
-  nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
-  Ay = A*sin(2*pi*omega*(z + t));
-  chi = 2.0*A*pi*omega*cos(2*pi*omega*(z + t));
-  Az = 0;
-  psi = 0;
 
-  if (r_square >= a_ext*a_ext) // exterior
+  const T n1 = 27;
+  const T n2 = 35; // wave numbers between two full waves
+
+  if (z >= (n1/4.0*omega) || z <= (n2/4.0*omega) )
   {
-    phi = M*A*r_inv_cubed*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );
-    mu = 2.0*M*A*r_inv_cubed*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  );
+    Ax = A*cos(2*pi*omega*(z + t));
+    nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
+    Ay = A*sin(2*pi*omega*(z + t));
+    chi = 2.0*A*pi*omega*cos(2*pi*omega*(z + t));
+    Az = 0;
+    psi = 0;
+
+    if (r_square >= a_ext*a_ext) // exterior
+    {
+      phi = M*A*r_inv_cubed*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );
+      mu = 2.0*M*A*r_inv_cubed*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  );
+    }
+    else //interior
+    {
+      phi = M*A*pow(a_ext,-3.0)*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );
+      mu = 2.0*M*A*pow(a_ext,-3.0)*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  );
+    }
   }
-  else //interior
+  else
   {
-    phi = M*A*pow(a_ext,-3.0)*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) );
-    mu = 2.0*M*A*pow(a_ext,-3.0)*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  );
+    phi = 0.0, mu = 0.0, Ax = 0.0, nu = 0.0, Ay = 0.0, chi = 0.0, Az = 0.0, psi = 0.0;
   }
 
 }
@@ -358,13 +368,6 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
             //std::cout<<"\n"<<"Interior: (x,y,z)= ("<<p.x<<","<<p.y<<","<<p.z<<"),mu ="<<mu(p.I)<<" ,del_i A^i ="<<(d_Ax[0] + d_Ay[1] + d_Az[2])<<" ,dx_Ax="<<d_Ax[0]<<" ,dy_Ay="<<d_Ay[1]<<" ,dz_Az="<<d_Az[2];
             //std::cout<<", t1 ="<<(mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2]);
             //std::cout<<"\n"<<"t2 ="<<(2.0*(d_alpha_int[0]*Ax(p.I) + d_alpha_int[1]*Ay(p.I) + d_alpha_int[2]*Az(p.I) ));
-          }
-          for (int d = 0; d < dim; ++d) {
-              if (p.BI[d] < 0 || p.BI[d] > 0 ) //left and right boundaries
-              {
-              // set constraint to zero as well at boundaries
-              constraint_violation(p.I) = 0; //does not work
-              }
           }            
 
       });
