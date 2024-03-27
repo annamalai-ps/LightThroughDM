@@ -173,7 +173,6 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
 
 extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_RHS;
-  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_RHS_FLAT;
   DECLARE_CCTK_PARAMETERS;
 
   if (CCTK_EQUALS(boundary_condition, "CarpetX")) {

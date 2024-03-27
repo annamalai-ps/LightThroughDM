@@ -53,14 +53,14 @@ CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
 
 CCTK_REAL rhs_flat TYPE=gf TAGS='checkpoint="no"'
 {
-  phi_flat_rhs
-  mu_flat_rhs
-  Ax_flat_rhs
-  nu_flat_rhs
-  Ay_flat_rhs
-  chi_flat_rhs
-  Az_flat_rhs
-  psi_flat_rhs
+  phi_rhs_flat
+  mu_rhs_flat
+  Ax_rhs_flat
+  nu_rhs_flat
+  Ay_rhs_flat
+  chi_rhs_flat
+  Az_rhs_flat
+  psi_rhs_flat
 } "RHS of flat state vector"
 
 CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'
