@@ -37,8 +37,8 @@ CarpetX::periodic_z = yes
 LightThroughDM::boundary_condition = "reflecting"
 
 # Physics parameters
-LightThroughDM::M = 1e-2
-LightThroughDM::a_ext = 0.2
+LightThroughDM::M = 1e-4
+LightThroughDM::a_ext = 0.1
 LightThroughDM::amplitude = 1.0
 
 ODESolvers::method = "RK4"
