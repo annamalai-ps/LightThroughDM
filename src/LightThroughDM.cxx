@@ -27,8 +27,8 @@ constexpr void plane_wave(const T M, const T a_ext, const T A, const T kx, const
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
 
-  const T n1 = 27;
-  const T n2 = 35; // wave numbers between two full waves
+  const T n1 = 7;
+  const T n2 = 15; // wave numbers between two full waves
 
   if (z >= (n1/(4.0*omega)) && z <= (n2/(4.0*omega)) )
   {
