@@ -405,6 +405,21 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
       });
 }
 
+extern "C" void LightThroughDM_RMSError(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_ARGUMENTSX_LightThroughDM_RMSError;
+  DECLARE_CCTK_PARAMETERS;
+  grid.loop_int_device<0, 0, 0>(
+      grid.nghostzones,
+      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+          using std::pow, std::sqrt;
+
+          phi_RMSE(p.I) = sqrt( pow( phi(p.I) - phi_flat(p.I) ,2.0) );
+          Ax_RMSE(p.I) = sqrt( pow( Ax(p.I) - Ax_flat(p.I) ,2.0) );
+          Ay_RMSE(p.I) = sqrt( pow( Ay(p.I) - Ay_flat(p.I) ,2.0) );
+          Az_RMSE(p.I) = sqrt( pow( Az(p.I) - Az_flat(p.I) ,2.0) );
+                    
+      });
+}
 
 
 

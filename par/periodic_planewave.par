@@ -56,11 +56,18 @@ IO::out_every = $out_every
 #"
 
 CarpetX::out_silo_vars = "
-    LightThroughDM::state
-    LightThroughDM::state_flat
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+    LightThroughDM::phi_flat
+    LightThroughDM::Ax_flat
+    LightThroughDM::Ay_flat
+    LightThroughDM::Az_flat
+    
     LightThroughDM::density_pressure
     LightThroughDM::constraint
-    LightThroughDM::constraint_flat
+    LightThroughDM::RMSError
 "
 
 TimerReport::out_every = $out_every

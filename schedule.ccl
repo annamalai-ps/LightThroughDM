@@ -17,6 +17,12 @@ SCHEDULE LightThroughDM_Constraint AT postinitial
   SYNC: constraint
 } "Calculate constraint violation postinitial"
 
+SCHEDULE LightThroughDM_RMSError AT postinitial
+{
+  LANG: C
+  READS: state(everywhere) state_flat(everywhere)
+  WRITES: RMSError(interior)
+} "Calculate RMSError at initial time"
 
 SCHEDULE LightThroughDM_RHS IN ODESolvers_RHS
 {
@@ -33,3 +39,10 @@ SCHEDULE LightThroughDM_Constraint IN ODESolvers_PostStep
   WRITES: constraint(interior)
   SYNC: constraint
 } "Calculate constraint violation after a time step"
+
+SCHEDULE LightThroughDM_RMSError IN ODESolvers_PostStep
+{
+  LANG: C
+  READS: state(interior) state_flat(interior)
+  WRITES: RMSError(interior)
+} "Calculate deviation from flat space wave equation"
