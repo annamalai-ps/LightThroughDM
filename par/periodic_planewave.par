@@ -7,7 +7,9 @@ ActiveThorns = "
 "
 $nlevels = 1
 $ncells = 192
-$out_every = 10
+
+#change this when you change resolution,dtfac
+$out_every = 50
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
