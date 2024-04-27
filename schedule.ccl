@@ -1,0 +1,48 @@
+# Schedule definitions for thorn LightThroughDM
+
+STORAGE: state
+
+SCHEDULE LightThroughDM_Initial AT initial
+{
+  LANG: C
+  WRITES: state(everywhere) state_flat(everywhere) density(everywhere)
+  SYNC: state state_flat density
+} "Initialize scalar wave state"
+
+SCHEDULE LightThroughDM_Constraint AT postinitial
+{
+  LANG: C
+  READS: state(everywhere) state_flat(everywhere)
+  WRITES: constraint(interior)
+  SYNC: constraint
+} "Calculate constraint violation postinitial"
+
+SCHEDULE LightThroughDM_RMSError AT postinitial
+{
+  LANG: C
+  READS: state(everywhere) state_flat(everywhere)
+  WRITES: RMSError(interior)
+} "Calculate RMSError at initial time"
+
+SCHEDULE LightThroughDM_RHS IN ODESolvers_RHS
+{
+  LANG: C
+  READS: state(everywhere) state_flat(everywhere) density(interior)
+  WRITES: rhs(interior) rhs_flat(interior) state(interior)
+  SYNC: rhs rhs_flat
+} "Calculate scalar wave RHS"
+
+SCHEDULE LightThroughDM_Constraint IN ODESolvers_PostStep
+{
+  LANG: C
+  READS: state(everywhere) state_flat(everywhere)
+  WRITES: constraint(interior)
+  SYNC: constraint
+} "Calculate constraint violation after a time step"
+
+SCHEDULE LightThroughDM_RMSError IN ODESolvers_PostStep
+{
+  LANG: C
+  READS: state(interior) state_flat(interior)
+  WRITES: RMSError(interior)
+} "Calculate deviation from flat space wave equation"

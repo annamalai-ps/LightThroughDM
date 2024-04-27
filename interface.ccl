@@ -1,0 +1,77 @@
+# Interface definition for thorn LightThroughDM
+
+IMPLEMENTS: LightThroughDM
+
+INHERITS: CarpetX
+
+USES INCLUDE HEADER: loop_device.hxx
+USES INCLUDE HEADER: vect.hxx
+
+
+
+CCTK_REAL state TYPE=gf TAGS='rhs="rhs"'
+{
+  phi
+  mu
+  Ax
+  nu
+  Ay
+  chi 
+  Az
+  psi 
+} "state vector"
+
+CCTK_REAL state_flat TYPE=gf TAGS='rhs="rhs_flat"'
+{
+  phi_flat
+  mu_flat
+  Ax_flat
+  nu_flat
+  Ay_flat
+  chi_flat
+  Az_flat
+  psi_flat
+} "flat state vector"
+
+CCTK_REAL density TYPE=gf
+{
+  density 
+} "density function"
+
+CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
+{
+  phi_rhs
+  mu_rhs
+  Ax_rhs
+  nu_rhs
+  Ay_rhs
+  chi_rhs 
+  Az_rhs
+  psi_rhs
+} "RHS of state vector"
+
+CCTK_REAL rhs_flat TYPE=gf TAGS='checkpoint="no"'
+{
+  phi_rhs_flat
+  mu_rhs_flat
+  Ax_rhs_flat
+  nu_rhs_flat
+  Ay_rhs_flat
+  chi_rhs_flat
+  Az_rhs_flat
+  psi_rhs_flat
+} "RHS of flat state vector"
+
+CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'
+{
+  constraint_violation
+  constraint_violation_flat
+} "constraint violation"
+
+CCTK_REAL RMSError TYPE=gf TAGS='checkpoint="no"'
+{
+  phi_RMSE
+  Ax_RMSE
+  Ay_RMSE
+  Az_RMSE
+} "deviation from flat space wave equation"

@@ -1,0 +1,44 @@
+# Parameter definitions for thorn LightThroughDM
+
+KEYWORD initial_condition "Initial condition"
+{
+  "standing wave" :: "Standing wave"
+  "Gaussian" :: "Gaussian"
+  "plane wave" :: "plane wave"
+} "plane wave"
+
+CCTK_REAL wave_amplitude "Amplitude of plane wave"
+{
+  *:* :: ""
+} 1.0
+
+CCTK_REAL plane_wave_kx "kx for plane wave"
+{
+  *:* :: ""
+} 0.5
+
+CCTK_REAL plane_wave_ky "kz for plane wave"
+{
+  *:* :: ""
+} 0.5
+
+CCTK_REAL plane_wave_kz "kz for plane wave"
+{
+  *:* :: ""
+} 0.5
+
+CCTK_REAL sigma "width of Gaussian density"
+{
+  (0:* :: ""
+} 0.2
+
+KEYWORD boundary_condition "Boundary condition"
+{
+  "CarpetX" :: "Apply boundary conditions via CarpetX"
+  "periodic" :: "Apply a reflecting boundary condition"
+} "periodic"
+
+CCTK_REAL M "Mass of dark matter particle"
+{
+  *:* :: ""
+} 0.001
