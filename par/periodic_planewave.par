@@ -7,10 +7,10 @@ ActiveThorns = "
     LightThroughDM
 "
 $nlevels = 1
-$ncells = 128
+$ncells = 192
 
 #change this when you change resolution,dtfac
-$out_every = 32
+$out_every = 48
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -46,16 +46,16 @@ CarpetX::periodic_z = yes
 
 #LightThroughDM::initial_condition = "plane wave"
 LightThroughDM::boundary_condition = "periodic"
-LightThroughDM::epsdiss = 0.5
 
 # Physics parameters
 LightThroughDM::M = 1e-4
-LightThroughDM::a_ext = 0.4
-LightThroughDM::amplitude = 1.0
+#sigma=FWTM/4.29193, FWTM=0.2
+LightThroughDM::sigma = 0.046599
+LightThroughDM::wave_amplitude = 1.0
 # k = 1/(2*sqrt(3))
-LightThroughDM::standing_wave_kx = 1.65 
-LightThroughDM::standing_wave_ky = 1.65
-LightThroughDM::standing_wave_kz = 1.65
+LightThroughDM::plane_wave_kx = 1.65 
+LightThroughDM::plane_wave_ky = 1.65
+LightThroughDM::plane_wave_kz = 1.65
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.24
@@ -65,7 +65,7 @@ IO::out_every = $out_every
 
 #CarpetX::out_tsv_vars = "
 #    LightThroughDM::state
-#    LightThroughDM::density_pressure
+#    LightThroughDM::density
 #    LightThroughDM::constraint
 #"
 
@@ -79,7 +79,7 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::Ay_flat
 #    LightThroughDM::Az_flat
     
-#    LightThroughDM::density_pressure
+    LightThroughDM::density
     LightThroughDM::constraint
 #    LightThroughDM::RMSError
 "

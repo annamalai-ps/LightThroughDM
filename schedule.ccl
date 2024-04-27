@@ -5,8 +5,8 @@ STORAGE: state
 SCHEDULE LightThroughDM_Initial AT initial
 {
   LANG: C
-  WRITES: state(everywhere) state_flat(everywhere) density_pressure(everywhere)
-  SYNC: state state_flat density_pressure
+  WRITES: state(everywhere) state_flat(everywhere) density(everywhere)
+  SYNC: state state_flat density
 } "Initialize scalar wave state"
 
 SCHEDULE LightThroughDM_Constraint AT postinitial
@@ -27,7 +27,7 @@ SCHEDULE LightThroughDM_RMSError AT postinitial
 SCHEDULE LightThroughDM_RHS IN ODESolvers_RHS
 {
   LANG: C
-  READS: state(everywhere) state_flat(everywhere) density_pressure(interior)
+  READS: state(everywhere) state_flat(everywhere) density(interior)
   WRITES: rhs(interior) rhs_flat(interior) state(interior)
   SYNC: rhs rhs_flat
 } "Calculate scalar wave RHS"

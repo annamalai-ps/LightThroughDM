@@ -7,40 +7,30 @@ KEYWORD initial_condition "Initial condition"
   "plane wave" :: "plane wave"
 } "plane wave"
 
-CCTK_REAL amplitude "Initial amplitude"
+CCTK_REAL wave_amplitude "Amplitude of plane wave"
 {
   *:* :: ""
 } 1.0
 
-CCTK_REAL standing_wave_kx "kx for standing wave"
+CCTK_REAL plane_wave_kx "kx for plane wave"
 {
   *:* :: ""
 } 0.5
 
-CCTK_REAL standing_wave_ky "kz for standing wave"
+CCTK_REAL plane_wave_ky "kz for plane wave"
 {
   *:* :: ""
 } 0.5
 
-CCTK_REAL standing_wave_kz "ky for standing wave"
+CCTK_REAL plane_wave_kz "kz for plane wave"
 {
   *:* :: ""
 } 0.5
 
-CCTK_REAL gaussian_width "width of Gaussian"
+CCTK_REAL sigma "width of Gaussian density"
 {
   (0:* :: ""
-} 1.0
-
-CCTK_REAL gaussian_x_offset "x-offset for gaussian wave"
-{
-  *:* :: ""
-} 0.5
-
-CCTK_REAL epsdiss "overall dissipation strength - epsilon"
-{
-  *:* :: ""
-} 1.0
+} 0.2
 
 KEYWORD boundary_condition "Boundary condition"
 {
@@ -52,8 +42,3 @@ CCTK_REAL M "Mass of dark matter particle"
 {
   *:* :: ""
 } 0.001
-
-CCTK_REAL a_ext "radius of dark matter particle"
-{
-  *:* :: ""
-} 0.2
