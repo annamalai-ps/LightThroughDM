@@ -6,4 +6,4 @@ Licence      : LGPL
 
 1. Purpose
 
-Solve the Maxwell equations in curved spacetime for perturbed Minkowski metric with gaussian density.
+Solve the Maxwell equations in curved spacetime for Schwarzschild solution.

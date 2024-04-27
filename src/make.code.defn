@@ -1,0 +1,7 @@
+# Main make.code.defn file for thorn LightThroughDM
+
+# Source files in this directory
+SRCS = LightThroughDM.cxx
+
+# Subdirectories containing source files
+SUBDIRS =
