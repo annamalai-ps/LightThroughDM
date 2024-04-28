@@ -177,9 +177,9 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
           psi_rhs_flat(p.I) = (dd_Az_flat[0] + dd_Az_flat[1] + dd_Az_flat[2]);
 
 
-          const CCTK_REAL alpha;
+          CCTK_REAL alpha;
           Arith::vect<CCTK_REAL, dim> d_alpha;
-          const CCTK_REAL sum_dd_alpha;
+          CCTK_REAL sum_dd_alpha;
           if (p.x == 0 && p.y == 0 && p.z == 0.0){ //defn for indeterminate form at r=0
             alpha = pow(sigma,-1.0)*sqrt(2/pi);
             sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0));
