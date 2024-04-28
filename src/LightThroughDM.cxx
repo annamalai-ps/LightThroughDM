@@ -176,19 +176,21 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
           Az_rhs_flat(p.I) = psi_flat(p.I);
           psi_rhs_flat(p.I) = (dd_Az_flat[0] + dd_Az_flat[1] + dd_Az_flat[2]);
 
+
+          const CCTK_REAL alpha;
+          Arith::vect<CCTK_REAL, dim> d_alpha;
+          const CCTK_REAL sum_dd_alpha;
           if (p.x == 0 && p.y == 0 && p.z == 0.0){ //defn for indeterminate form at r=0
-            const CCTK_REAL alpha = pow(sigma,-1.0)*sqrt(2/pi);
-            Arith::vect<CCTK_REAL, dim> d_alpha;
-            const CCTK_REAL sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0));
+            alpha = pow(sigma,-1.0)*sqrt(2/pi);
+            sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0));
   
             for (int d = 0; d < dim; ++d) {
               d_alpha[d] = 0.0;
             }
           }
           else{
-            const CCTK_REAL alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*sigma));
-            Arith::vect<CCTK_REAL, dim> d_alpha;
-            const CCTK_REAL sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0))*exp(-r_square/(2.0*pow(sigma,2.0)));
+            alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*sigma));
+            sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0))*exp(-r_square/(2.0*pow(sigma,2.0)));
   
             for (int d = 0; d < dim; ++d) {
               d_alpha[d] = (M*p.X[d])*( sqrt(2/pi)*exp(-r_square/(2.0*pow(sigma,2.0)))/(sigma*r_square) 
@@ -280,7 +282,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
           Arith::vect<CCTK_REAL, dim> d_alpha;
           if (p.x == 0 && p.y == 0 && p.z == 0.0){   //defn for indeterminate form at r=0
             for (int d = 0; d < dim; ++d) {
-              d_alpha[d] = 0.0;
+              d_alpha[d] = 0.0; }
           }
           else{
             for (int d = 0; d < dim; ++d) {
