@@ -7,7 +7,7 @@ ActiveThorns = "
     LightThroughDM
 "
 $nlevels = 1
-$ncells = 192
+$ncells = 128
 
 #change this when you change resolution,dtfac
 $out_every = 1
