@@ -18,7 +18,7 @@ CCTK_REAL state TYPE=gf TAGS='rhs="rhs"'
   Ay
   chi 
   Az
-  psi 
+  psi
 } "state vector"
 
 CCTK_REAL state_flat TYPE=gf TAGS='rhs="rhs_flat"'
@@ -35,7 +35,8 @@ CCTK_REAL state_flat TYPE=gf TAGS='rhs="rhs_flat"'
 
 CCTK_REAL density TYPE=gf
 {
-  density 
+  density
+  alpha
 } "density function"
 
 CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'

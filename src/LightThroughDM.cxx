@@ -18,7 +18,7 @@ constexpr int dim = 3;
 template <typename T>
 constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const T ky, const T kz,
                              const T t, const T x, const T y, const T z, T &density,
-                             T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi,
+                             T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
                              T &phi_flat, T &mu_flat, T &Ax_flat, T &nu_flat, T &Ay_flat, T &chi_flat, T &Az_flat, T &psi_flat) {
   using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
 
@@ -42,12 +42,17 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
     psi = 0.0;
 
     if (x == 0 && y == 0 && z == 0.0){  //defn forindeterminate form at r=0
+      alpha = pow(sigma,-1.0)*sqrt(2.0/pi);
       phi = 0.0;
       mu = 0.0;
+      
     }
     else{
+      alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*sigma));
+
       phi = M*A*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
           - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
+
       mu = 2.0*M*A*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
           - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
     }
@@ -80,7 +85,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
             plane_wave(M, sigma, wave_amplitude, plane_wave_kx, plane_wave_ky,
                           plane_wave_kz, cctk_time, p.x, p.y, p.z, density(p.I),
-                          phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I),
+                          phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
                           phi_flat(p.I), mu_flat(p.I), Ax_flat(p.I), nu_flat(p.I), Ay_flat(p.I), chi_flat(p.I), Az_flat(p.I), psi_flat(p.I));
             
           }
@@ -129,6 +134,8 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
           Arith::vect<CCTK_REAL, dim> d_Ax;
           Arith::vect<CCTK_REAL, dim> d_Ay;
           Arith::vect<CCTK_REAL, dim> d_Az;
+          Arith::vect<CCTK_REAL, dim> d_alpha;
+          Arith::vect<CCTK_REAL, dim> dd_alpha;
 
           const CCTK_REAL pi = acos(-1.0);
           const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0);
@@ -162,7 +169,12 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
             dd_Ay_flat[d] = ( -Ay_flat(p.I + 2*p.DI[d]) + 16.0*Ay_flat(p.I + p.DI[d]) - 30.0*Ay_flat(p.I) + 
                       16.0*Ay_flat(p.I - p.DI[d]) - Ay_flat(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
             dd_Az_flat[d] = ( -Az_flat(p.I + 2*p.DI[d]) + 16.0*Az_flat(p.I + p.DI[d]) - 30.0*Az_flat(p.I) + 
-                      16.0*Az_flat(p.I - p.DI[d]) - Az_flat(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
+                      16.0*Az_flat(p.I - p.DI[d]) - Az_flat(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );\
+
+            d_alpha[d] = (-alpha(p.I + 2*p.DI[d]) + 8.0*alpha(p.I + p.DI[d]) -8.0*alpha(p.I - p.DI[d])
+                     + alpha(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
+            dd_alpha[d] = ( -alpha(p.I + 2*p.DI[d]) + 16.0*alpha(p.I + p.DI[d]) - 30.0*alpha(p.I) + 
+                      16.0*alpha(p.I - p.DI[d]) - alpha(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
           
           }
 
@@ -177,49 +189,29 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
           psi_rhs_flat(p.I) = (dd_Az_flat[0] + dd_Az_flat[1] + dd_Az_flat[2]);
 
 
-          CCTK_REAL alpha;
-          Arith::vect<CCTK_REAL, dim> d_alpha;
-          CCTK_REAL sum_dd_alpha;
-          if (p.x == 0 && p.y == 0 && p.z == 0.0){ //defn for indeterminate form at r=0
-            alpha = pow(sigma,-1.0)*sqrt(2/pi);
-            sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0));
-  
-            for (int d = 0; d < dim; ++d) {
-              d_alpha[d] = 0.0;
-            }
-          }
-          else{
-            alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*sigma));
-            sum_dd_alpha = -sqrt(2.0/pi)*(M*pow(sigma,-3.0))*exp(-r_square/(2.0*pow(sigma,2.0)));
-  
-            for (int d = 0; d < dim; ++d) {
-              d_alpha[d] = (M*p.X[d])*( sqrt(2/pi)*exp(-r_square/(2.0*pow(sigma,2.0)))/(sigma*r_square) 
-                            -erf(r/(sqrt(2.0)*sigma))*r_inv_cubed );
-            }
-          }
           phi_rhs(p.I) = mu(p.I);
-          mu_rhs(p.I) = pow(1 + 2.0*alpha,-1.0)*( (1 - 2.0*alpha)*(dd_phi[0] + dd_phi[1] + dd_phi[2])
-                        -phi(p.I)*sum_dd_alpha
+          mu_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_phi[0] + dd_phi[1] + dd_phi[2])
+                        -phi(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[0]*nu(p.I) + d_alpha[1]*chi(p.I) + d_alpha[2]*psi(p.I))
                         - 2.0*(d_alpha[0]*d_phi[0] + d_alpha[1]*d_phi[1] + d_alpha[2]*d_phi[2])
                         + 4.0*M_PI*density(p.I)*phi(p.I) );
           Ax_rhs(p.I) = nu(p.I);
-          nu_rhs(p.I) = pow(1 + 2.0*alpha,-1.0)*( (1 - 2.0*alpha)*(dd_Ax[0] + dd_Ax[1] + dd_Ax[2])
-                        +Ax(p.I)*sum_dd_alpha
+          nu_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_Ax[0] + dd_Ax[1] + dd_Ax[2])
+                        + Ax(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[2]*d_Az[0] + d_alpha[1]*d_Ay[0])
                         - 2.0*d_alpha[0]*(-mu(p.I) + d_Ay[1] + d_Az[2])
                         + 2.0*(d_alpha[0]*d_Ax[0] + d_alpha[1]*d_Ax[1] + d_alpha[2]*d_Ax[2])
                         - 4.0*M_PI*density(p.I)*Ax(p.I) );
           Ay_rhs(p.I) = chi(p.I);
-          chi_rhs(p.I) = pow(1 + 2.0*alpha,-1.0)*( (1 - 2.0*alpha)*(dd_Ay[0] + dd_Ay[1] + dd_Ay[2])
-                        +Ay(p.I)*sum_dd_alpha
+          chi_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_Ay[0] + dd_Ay[1] + dd_Ay[2])
+                        + Ay(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[0]*d_Ax[1] + d_alpha[2]*d_Az[1])
                         - 2.0*d_alpha[1]*(-mu(p.I) + d_Ax[0] + d_Az[2])
                         + 2.0*(d_alpha[0]*d_Ay[0] + d_alpha[1]*d_Ay[1] + d_alpha[2]*d_Ay[2])
                         - 4.0*M_PI*density(p.I)*Ay(p.I) );  
           Az_rhs(p.I) = psi(p.I);
-          psi_rhs(p.I) = pow(1 + 2.0*alpha,-1.0)*( (1 - 2.0*alpha)*(dd_Az[0] + dd_Az[1] + dd_Az[2])
-                        +Az(p.I)*sum_dd_alpha
+          psi_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_Az[0] + dd_Az[1] + dd_Az[2])
+                        + Az(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[0]*d_Ax[2] + d_alpha[1]*d_Ay[2])
                         - 2.0*d_alpha[2]*(-mu(p.I) + d_Ax[0] + d_Ay[1])
                         + 2.0*(d_alpha[0]*d_Az[0] + d_alpha[1]*d_Az[1] + d_alpha[2]*d_Az[2])
@@ -247,6 +239,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
           Arith::vect<CCTK_REAL, dim> d_Ax_flat;
           Arith::vect<CCTK_REAL, dim> d_Ay_flat;
           Arith::vect<CCTK_REAL, dim> d_Az_flat;
+          Arith::vect<CCTK_REAL, dim> d_alpha;
 
           const CCTK_REAL pi = acos(-1.0);
           const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0);
@@ -274,22 +267,14 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
                      + Ay_flat(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
             d_Az_flat[d] = (-Az_flat(p.I + 2*p.DI[d]) + 8.0*Az_flat(p.I + p.DI[d]) -8.0*Az_flat(p.I - p.DI[d])
                      + Az_flat(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
+
+            d_alpha[d] = (-alpha(p.I + 2*p.DI[d]) + 8.0*alpha(p.I + p.DI[d]) -8.0*alpha(p.I - p.DI[d])
+                     + alpha(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
           }
 
           // for flat spacetime
           constraint_violation_flat(p.I) = ( mu_flat(p.I) + d_Ax_flat[0] + d_Ay_flat[1] + d_Az_flat[2] );
           
-          Arith::vect<CCTK_REAL, dim> d_alpha;
-          if (p.x == 0 && p.y == 0 && p.z == 0.0){   //defn for indeterminate form at r=0
-            for (int d = 0; d < dim; ++d) {
-              d_alpha[d] = 0.0; }
-          }
-          else{
-            for (int d = 0; d < dim; ++d) {
-              d_alpha[d] = (M*p.X[d])*( sqrt(2/pi)*exp(-r_square/(2.0*pow(sigma,2.0)))/(sigma*r_square) 
-                            -erf(r/(sqrt(2.0)*sigma))*r_inv_cubed );
-            }
-          }
       
           constraint_violation(p.I) = ( mu(p.I) + d_Ax[0] + d_Ay[1] + d_Az[2] ) 
                                       + 2.0*(d_alpha[0]*Ax(p.I) + d_alpha[1]*Ay(p.I) + d_alpha[2]*Az(p.I) );
