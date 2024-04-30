@@ -123,7 +123,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
     grid.loop_int_device<0, 0, 0>(
         grid.nghostzones,
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-          using std::acos, std::pow, std::sqrt, std::erf, std::exp;
+          std::pow, std::sqrt;
 
           Arith::vect<CCTK_REAL, dim> dd_phi;
           Arith::vect<CCTK_REAL, dim> dd_Ax;
@@ -139,11 +139,6 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
           Arith::vect<CCTK_REAL, dim> d_Az;
           Arith::vect<CCTK_REAL, dim> d_alpha;
           Arith::vect<CCTK_REAL, dim> dd_alpha;
-
-          const CCTK_REAL pi = acos(-1.0);
-          const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0);
-          const CCTK_REAL r = sqrt(r_square);
-          const CCTK_REAL r_inv_cubed = pow((pow(p.x,2.0)+pow(p.y,2.0)+pow(p.z,2.0)),-1.5);
 
           for (int d = 0; d < dim; ++d)
           {
@@ -172,7 +167,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
             dd_Ay_flat[d] = ( -Ay_flat(p.I + 2*p.DI[d]) + 16.0*Ay_flat(p.I + p.DI[d]) - 30.0*Ay_flat(p.I) + 
                       16.0*Ay_flat(p.I - p.DI[d]) - Ay_flat(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
             dd_Az_flat[d] = ( -Az_flat(p.I + 2*p.DI[d]) + 16.0*Az_flat(p.I + p.DI[d]) - 30.0*Az_flat(p.I) + 
-                      16.0*Az_flat(p.I - p.DI[d]) - Az_flat(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );\
+                      16.0*Az_flat(p.I - p.DI[d]) - Az_flat(p.I - 2*p.DI[d]) ) / ( 12.0*pow(p.DX[d], 2.0) );
 
             d_alpha[d] = (-alpha(p.I + 2*p.DI[d]) + 8.0*alpha(p.I + p.DI[d]) -8.0*alpha(p.I - p.DI[d])
                      + alpha(p.I - 2*p.DI[d]) )/(12.0*p.DX[d]);
@@ -243,12 +238,6 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
           Arith::vect<CCTK_REAL, dim> d_Ay_flat;
           Arith::vect<CCTK_REAL, dim> d_Az_flat;
           Arith::vect<CCTK_REAL, dim> d_alpha;
-
-          const CCTK_REAL pi = acos(-1.0);
-          const CCTK_REAL r_square = pow(p.x, 2.0) + pow(p.y, 2.0) + pow(p.z, 2.0);
-          const CCTK_REAL r = sqrt(r_square);
-          const CCTK_REAL r_inv_cubed = pow((pow(p.x,2.0)+pow(p.y,2.0)+pow(p.z,2.0)),-1.5);
-
 
           for (int d = 0; d < dim; ++d)
           {
