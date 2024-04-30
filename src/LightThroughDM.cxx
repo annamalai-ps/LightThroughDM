@@ -48,7 +48,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
       
     }
     else{
-      alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*sigma));
+      alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*sigma));
 
       phi = M*A*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
           - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
