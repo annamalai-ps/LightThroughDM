@@ -30,7 +30,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   density = ( M*pow(sigma,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(sigma,2.0)));
 
   if (x == 0 && y == 0 && z == 0.0){  //defn forindeterminate form at r=0
-      alpha = pow(sigma,-1.0)*sqrt(2.0/pi);      
+      alpha = M*pow(sigma,-1.0)*sqrt(2.0/pi);      
   }
   else{
       alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*sigma));
