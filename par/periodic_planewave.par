@@ -48,8 +48,8 @@ LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 LightThroughDM::M = 1e-3
-#sigma=FWTM/4.29193, FWTM=0.4
-LightThroughDM::sigma = 0.09320
+#sigma=FWTM/4.29193, FWTM=0.1
+LightThroughDM::sigma = 0.02330
 LightThroughDM::wave_amplitude = 1.0
 # k = 1/(2*sqrt(3))
 LightThroughDM::plane_wave_kx = 1.65 
@@ -80,7 +80,7 @@ CarpetX::out_silo_vars = "
     
     LightThroughDM::density
     LightThroughDM::constraint
-#    LightThroughDM::RMSError
+    LightThroughDM::RMSError
 "
 
 #CarpetX::out_openpmd_vars = "
