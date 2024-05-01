@@ -123,7 +123,7 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
     grid.loop_int_device<0, 0, 0>(
         grid.nghostzones,
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-          std::pow, std::sqrt;
+          using std::pow, std::sqrt;
 
           Arith::vect<CCTK_REAL, dim> dd_phi;
           Arith::vect<CCTK_REAL, dim> dd_Ax;
