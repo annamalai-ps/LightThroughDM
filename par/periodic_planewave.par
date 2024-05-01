@@ -47,9 +47,9 @@ CarpetX::periodic_z = yes
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
-LightThroughDM::M = 1e-3
-#sigma=FWTM/4.29193, FWTM=0.1
-LightThroughDM::sigma = 0.02330
+LightThroughDM::M = 0.5e-3
+#sigma=FWTM/4.29193, FWTM=0.2
+LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
 # k = 1/(2*sqrt(3))
 LightThroughDM::plane_wave_kx = 1.65 
