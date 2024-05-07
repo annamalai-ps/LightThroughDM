@@ -63,11 +63,11 @@ CarpetX::dtfac = 0.24
 IO::out_dir = $parfile
 IO::out_every = $out_every
 
-#CarpetX::out_tsv_vars = "
-#    LightThroughDM::state
+CarpetX::out_tsv_vars = "
+    LightThroughDM::state
 #    LightThroughDM::density
-#    LightThroughDM::constraint
-#"
+    LightThroughDM::constraint
+"
 
 CarpetX::out_silo_vars = "
     LightThroughDM::phi
