@@ -5,6 +5,7 @@ ActiveThorns = "
     TimerReport
     BoxInBox
     LightThroughDM
+    CoordinatesX
 "
 $nlevels = 1
 $ncells = 128
@@ -15,7 +16,7 @@ $out_every = 32
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
 
-CarpetX::poison_undefined_values = no
+CarpetX::poison_undefined_values = yes
 
 CarpetX::ncells_x = $ncells
 CarpetX::ncells_y = $ncells
@@ -32,7 +33,7 @@ CarpetX::max_num_levels = $nlevels
 #BoxInBox::radius_z_1[1] = 0.25
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 2.0
+Cactus::cctk_final_time = 0.0
 #Cactus::cctk_itlast = 10
 
 #Set ghost zones for 4th order finite difference method:
@@ -43,7 +44,7 @@ CarpetX::periodic_x = yes
 CarpetX::periodic_y = yes
 CarpetX::periodic_z = yes
 
-#LightThroughDM::initial_condition = "plane wave"
+LightThroughDM::initial_condition = "plane wave"
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
@@ -95,7 +96,7 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::density_pressure
 #    LightThroughDM::constraint
 #    LightThroughDM::RMSError
-#    Coordinates::VERTEX_COORDS
+#    CoordinatesX::vertex_coords
 #"
 
 TimerReport::out_every = $out_every
