@@ -8,7 +8,7 @@ ActiveThorns = "
     CoordinatesX
 "
 $nlevels = 1
-$ncells = 128
+$ncells = 256
 
 #change this when you change resolution,dtfac
 $out_every = 1
@@ -53,9 +53,9 @@ LightThroughDM::M = 0.5e-3
 LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
 # k = 1/(2*sqrt(3))
-LightThroughDM::plane_wave_kx = 1.65 
-LightThroughDM::plane_wave_ky = 1.65
-LightThroughDM::plane_wave_kz = 1.65
+LightThroughDM::plane_wave_kx = 0.53033008589 
+LightThroughDM::plane_wave_ky = 0.53033008589
+LightThroughDM::plane_wave_kz = 0.53033008589
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.24
@@ -63,16 +63,15 @@ CarpetX::dtfac = 0.24
 IO::out_dir = $parfile
 IO::out_every = $out_every
 
-CarpetX::out_tsv_vars = "
-    LightThroughDM::state
-    LightThroughDM::state_flat
-    LightThroughDM::rhs
-    LightThroughDM::rhs_flat
-    LightThroughDM::density
-    LightThroughDM::constraint
-    LightThroughDM::constraint_violation_flat
-
-"
+#CarpetX::out_tsv_vars = "
+#    LightThroughDM::state
+#    LightThroughDM::state_flat
+#    LightThroughDM::rhs
+#    LightThroughDM::rhs_flat
+#    LightThroughDM::density
+#    LightThroughDM::constraint
+#    LightThroughDM::constraint_violation_flat
+#"
 
 CarpetX::out_silo_vars = "
     LightThroughDM::phi

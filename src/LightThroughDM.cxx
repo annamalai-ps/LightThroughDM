@@ -29,7 +29,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
 
   density = ( M*pow(sigma,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(sigma,2.0)));
 
-  if (x == 0 && y == 0 && z == 0.0){  //defn forindeterminate form at r=0
+  if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
       alpha = M*pow(sigma,-1.0)*sqrt(2.0/pi);      
   }
   else{
@@ -39,41 +39,41 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   const T n1 = 7;
   const T n2 = 11; // wave numbers between two full waves
 
-  if (z >= (n1/(4.0*omega)) && z <= (n2/(4.0*omega)) )
-  {
-    Ax = A*cos(2*pi*omega*(z + t));
-    nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
-    Ay = A*sin(2*pi*omega*(z + t));
-    chi = 2.0*A*pi*omega*cos(2*pi*omega*(z + t));
-    Az = 0.0;
-    psi = 0.0;
+  //if (z >= (n1/(4.0*omega)) && z <= (n2/(4.0*omega)) )
+  //{
+  Ax = A*cos(2*pi*omega*(z + t));
+  nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
+  Ay = A*sin(2*pi*omega*(z + t));
+  chi = 2.0*A*pi*omega*cos(2*pi*omega*(z + t));
+  Az = 0.0;
+  psi = 0.0;
 
-    if (x == 0 && y == 0 && z == 0.0){  //defn forindeterminate form at r=0
-      phi = 0.0;
-      mu = 0.0;
-    }
-    else{
-      phi = M*A*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
-          - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
-
-      mu = 2.0*M*A*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
-          - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
-    }
-
-    Ax_flat = Ax;
-    nu_flat = nu;
-    Ay_flat = Ay;
-    chi_flat = chi;
-    Az_flat = Az;
-    psi_flat = psi;
-    phi_flat = 0.0;
-    mu_flat = 0.0;
+  if (x == 0 && y == 0 && z == 0.0){  //defn forindeterminate form at r=0
+    phi = 0.0;
+    mu = 0.0;
   }
-  else
-  {
-    phi = 0.0, mu = 0.0, Ax = 0.0, nu = 0.0, Ay = 0.0, chi = 0.0, Az = 0.0, psi = 0.0;
-    phi_flat = 0.0, mu_flat = 0.0, Ax_flat = 0.0, nu_flat = 0.0, Ay_flat = 0.0, chi_flat = 0.0, Az_flat = 0.0, psi_flat = 0.0;
+  else{
+    phi = M*A*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+        - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
+
+    mu = 2.0*M*A*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+        - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
   }
+
+  Ax_flat = Ax;
+  nu_flat = nu;
+  Ay_flat = Ay;
+  chi_flat = chi;
+  Az_flat = Az;
+  psi_flat = psi;
+  phi_flat = 0.0;
+  mu_flat = 0.0;
+  //}
+  //else
+  //{
+  //  phi = 0.0, mu = 0.0, Ax = 0.0, nu = 0.0, Ay = 0.0, chi = 0.0, Az = 0.0, psi = 0.0;
+  //  phi_flat = 0.0, mu_flat = 0.0, Ax_flat = 0.0, nu_flat = 0.0, Ay_flat = 0.0, chi_flat = 0.0, Az_flat = 0.0, psi_flat = 0.0;
+  //}
 
 }
 
