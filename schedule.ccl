@@ -5,7 +5,7 @@ STORAGE: state
 SCHEDULE LightThroughDM_Initial AT initial
 {
   LANG: C
-  WRITES: state(interior) state_flat(interior) density(interior)
+  WRITES: state(interior) state_flat(interior) density(interior) alpha(interior)
   SYNC: state state_flat density
 } "Initialize scalar wave state"
 
