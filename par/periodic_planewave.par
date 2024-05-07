@@ -65,8 +65,13 @@ IO::out_every = $out_every
 
 CarpetX::out_tsv_vars = "
     LightThroughDM::state
-#    LightThroughDM::density
+    LightThroughDM::state_flat
+    LightThroughDM::rhs
+    LightThroughDM::rhs_flat
+    LightThroughDM::density
     LightThroughDM::constraint
+    LightThroughDM::constraint_violation_flat
+
 "
 
 CarpetX::out_silo_vars = "
