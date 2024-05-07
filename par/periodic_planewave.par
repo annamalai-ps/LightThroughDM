@@ -11,7 +11,7 @@ $nlevels = 1
 $ncells = 128
 
 #change this when you change resolution,dtfac
-$out_every = 32
+$out_every = 1
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
