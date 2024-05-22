@@ -8,7 +8,7 @@ ActiveThorns = "
     CoordinatesX
 "
 $nlevels = 1
-$ncells = 128
+$ncells = 256
 
 #change this when you change resolution,dtfac
 $out_every = 1
