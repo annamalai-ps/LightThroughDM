@@ -34,7 +34,7 @@ CarpetX::max_num_levels = $nlevels
 
 #Cactus::terminate = "time"
 #Cactus::cctk_final_time = 2.0
-Cactus::cctk_itlast = 10
+Cactus::cctk_itlast = 5
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2
