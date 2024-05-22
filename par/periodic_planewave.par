@@ -7,7 +7,7 @@ ActiveThorns = "
     LightThroughDM
     CoordinatesX
 "
-$nlevels = 1
+$nlevels = 2
 $ncells = 128
 
 #change this when you change resolution,dtfac
@@ -23,14 +23,14 @@ CarpetX::ncells_y = $ncells
 CarpetX::ncells_z = $ncells
 
 CarpetX::max_num_levels = $nlevels
-#BoxInBox::num_regions = 1
-#BoxInBox::num_levels_1 = 2
-#BoxInBox::position_x_1 = 0.0
-#BoxInBox::position_y_1 = 0.0
-#BoxInBox::position_z_1 = 0.0
-#BoxInBox::radius_x_1[1] = 0.25
-#BoxInBox::radius_y_1[1] = 0.25
-#BoxInBox::radius_z_1[1] = 0.25
+BoxInBox::num_regions = 1
+BoxInBox::num_levels_1 = 2
+BoxInBox::position_x_1 = 0.0
+BoxInBox::position_y_1 = 0.0
+BoxInBox::position_z_1 = 0.0
+BoxInBox::radius_x_1[1] = 0.3
+BoxInBox::radius_y_1[1] = 0.3
+BoxInBox::radius_z_1[1] = 0.3
 
 #Cactus::terminate = "time"
 #Cactus::cctk_final_time = 2.0
