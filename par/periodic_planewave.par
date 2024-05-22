@@ -53,12 +53,12 @@ LightThroughDM::M = 0.5e-3
 LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
 # k = 2pi/sqrt(3)
-LightThroughDM::plane_wave_kx = 3.62759872847 
-LightThroughDM::plane_wave_ky = 3.62759872847
-LightThroughDM::plane_wave_kz = 3.62759872847
+LightThroughDM::plane_wave_kx = 0.906899682117 
+LightThroughDM::plane_wave_ky = 0.906899682117
+LightThroughDM::plane_wave_kz = 0.906899682117
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.05
+CarpetX::dtfac = 0.24
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
