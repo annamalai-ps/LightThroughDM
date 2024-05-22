@@ -23,7 +23,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
 
   const T pi = acos(-T(1));
-  const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
+  const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));;
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
 
@@ -41,10 +41,10 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
 
   //if (z >= (n1/(4.0*omega)) && z <= (n2/(4.0*omega)) )
   //{
-  Ax = A*cos(2*pi*omega*(z + t));
-  nu = -2.0*A*pi*omega*sin(2*pi*omega*(z + t));
-  Ay = A*sin(2*pi*omega*(z + t));
-  chi = 2.0*A*pi*omega*cos(2*pi*omega*(z + t));
+  Ax = A*cos(omega*(z + t));
+  nu = -A*omega*sin(omega*(z + t));
+  Ay = A*cos(omega*(z + t));
+  chi = -A*omega*sin(omega*(z + t));
   Az = 0.0;
   psi = 0.0;
 
@@ -53,10 +53,10 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
     mu = 0.0;
   }
   else{
-    phi = M*A*pow(pi*omega,-1.0)*( x*sin(2*pi*omega*(z + t)) - y*cos(2*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+    phi = 2.0*M*A*pow(omega,-1.0)*( x*sin(omega*(z + t)) + y*sin(omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
 
-    mu = 2.0*M*A*( x*cos(2*pi*omega*(z + t)) + y*sin(2*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+    mu = 2.0*M*A*( x*cos(omega*(z + t)) + y*cos(omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
   }
 
