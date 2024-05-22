@@ -41,10 +41,10 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
 
   //if (z >= (n1/(4.0*omega)) && z <= (n2/(4.0*omega)) )
   //{
-  Ax = A*cos(omega*(z + t));
-  nu = -A*omega*sin(omega*(z + t));
-  Ay = A*cos(omega*(z + t));
-  chi = -A*omega*sin(omega*(z + t));
+  Ax = A*sin(omega*(z + t));
+  nu = A*omega*cos(omega*(z + t));
+  Ay = A*sin(omega*(z + t));
+  chi = A*omega*cos(omega*(z + t));
   Az = 0.0;
   psi = 0.0;
 
@@ -53,10 +53,10 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
     mu = 0.0;
   }
   else{
-    phi = 2.0*M*A*pow(omega,-1.0)*( x*sin(omega*(z + t)) + y*sin(omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+    phi = 2.0*M*A*pow(omega,-1.0)*( -x*cos(omega*(z + t)) - y*cos(omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
 
-    mu = 2.0*M*A*( x*cos(omega*(z + t)) + y*cos(omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+    mu = 2.0*M*A*( x*sin(omega*(z + t)) + y*sin(omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
   }
 
