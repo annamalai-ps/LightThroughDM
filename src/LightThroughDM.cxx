@@ -38,9 +38,9 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   }
 
   Ax = amp*cos(omega*(z + t));
-  nu = -amp*omega*sin(omega*(z + t));
+  nu = 0.0;//-amp*omega*sin(omega*(z + t));
   Ay = amp*sin(omega*(z + t));
-  chi = amp*omega*cos(omega*(z + t));
+  chi = 0.0;//amp*omega*cos(omega*(z + t));
   Az = 0.0;
   psi = 0.0;
 
