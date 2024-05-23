@@ -52,10 +52,10 @@ LightThroughDM::M = 0.5e-3
 #sigma=FWTM/4.29193, FWTM=0.2
 LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
-# k = 8 pi
-LightThroughDM::plane_wave_kx = 8.0
-LightThroughDM::plane_wave_ky = 8.0
-LightThroughDM::plane_wave_kz = 8.0
+# k = 2 pi/sqrt(3)
+LightThroughDM::plane_wave_kx = 3.62759872847
+LightThroughDM::plane_wave_ky = 3.62759872847
+LightThroughDM::plane_wave_kz = 3.62759872847
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.24
@@ -65,30 +65,11 @@ IO::out_every = $out_every
 
 #CarpetX::out_tsv_vars = "
 #    LightThroughDM::state
-#    LightThroughDM::state_flat
-#    LightThroughDM::rhs
-#    LightThroughDM::rhs_flat
 #    LightThroughDM::density
 #    LightThroughDM::constraint
-#    LightThroughDM::constraint_violation_flat
 #"
 
 CarpetX::out_silo_vars = "
-    LightThroughDM::phi
-    LightThroughDM::Ax
-    LightThroughDM::Ay
-    LightThroughDM::Az
-#    LightThroughDM::phi_flat
-#    LightThroughDM::Ax_flat
-#    LightThroughDM::Ay_flat
-#    LightThroughDM::Az_flat
-    
-    LightThroughDM::density
-    LightThroughDM::constraint
-    LightThroughDM::RMSError
-"
-
-#CarpetX::out_openpmd_vars = "
 #    LightThroughDM::phi
 #    LightThroughDM::Ax
 #    LightThroughDM::Ay
@@ -96,12 +77,27 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::phi_flat
 #    LightThroughDM::Ax_flat
 #    LightThroughDM::Ay_flat
+#    LightThroughDM::Az_flat
+    
+#    LightThroughDM::density
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+"
+
+CarpetX::out_openpmd_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+#    LightThroughDM::phi_flat
+#    LightThroughDM::Ax_flat
+#    LightThroughDM::Ay_flat
 #    LightThroughDM::Az_flat   
 #    LightThroughDM::density_pressure
-#    LightThroughDM::constraint
+    LightThroughDM::constraint
 #    LightThroughDM::RMSError
-#    CoordinatesX::vertex_coords
-#"
+    CoordinatesX::vertex_coords
+"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"
