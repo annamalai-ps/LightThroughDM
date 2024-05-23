@@ -50,7 +50,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
     mu = 0.0;
   }
   else{
-    phi = 2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(omega*(z + t)) - y*cos(omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+    phi = 2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*omega*(z + t)) - y*cos(2.0*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
 
     mu = 2.0*M*amp*( x*cos(2.0*pi*omega*(z + t)) + y*sin(2.0*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
