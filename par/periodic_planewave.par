@@ -33,7 +33,7 @@ CarpetX::max_num_levels = $nlevels
 #BoxInBox::radius_z_1[1] = 0.3
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 2.0
+Cactus::cctk_final_time = 1.8
 #Cactus::cctk_itlast = 3
 
 #Set ghost zones for 4th order finite difference method:
@@ -53,9 +53,9 @@ LightThroughDM::M = 0.5e-3
 LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
 # k = 4 pi
-LightThroughDM::plane_wave_kx = 12.566370614359172953850573533118 
-LightThroughDM::plane_wave_ky = 12.566370614359172953850573533118
-LightThroughDM::plane_wave_kz = 12.566370614359172953850573533118
+LightThroughDM::plane_wave_kx = 36 
+LightThroughDM::plane_wave_ky = 36
+LightThroughDM::plane_wave_kz = 36
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.24
