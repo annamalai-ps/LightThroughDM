@@ -27,7 +27,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
   const T a = 200;
-  const T amp = pow(1+exp(-2*a*(z-pi/6)),-1.0) - pow(1+exp(-2*a*(z-pi/4)),-1.0);
+  const T amp = pow(1+exp(-2*a*(z-0.6)),-1.0) - pow(1+exp(-2*a*(z-0.8)),-1.0);
 
   density = ( M*pow(sigma,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(sigma,2.0)));
 
