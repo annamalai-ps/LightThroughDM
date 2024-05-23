@@ -8,7 +8,7 @@ ActiveThorns = "
     CoordinatesX
 "
 $nlevels = 1
-$ncells = 256
+$ncells = 128
 
 #change this when you change resolution,dtfac
 $out_every = 1
@@ -52,10 +52,10 @@ LightThroughDM::M = 0.5e-3
 #sigma=FWTM/4.29193, FWTM=0.2
 LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
-# k = 2pi/sqrt(3)
-LightThroughDM::plane_wave_kx = 1.81379936423 
-LightThroughDM::plane_wave_ky = 1.81379936423
-LightThroughDM::plane_wave_kz = 1.81379936423
+# k = 4 pi
+LightThroughDM::plane_wave_kx = 12.566370614359172953850573533118 
+LightThroughDM::plane_wave_ky = 12.566370614359172953850573533118
+LightThroughDM::plane_wave_kz = 12.566370614359172953850573533118
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.24
