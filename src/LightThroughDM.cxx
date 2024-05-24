@@ -27,7 +27,7 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
   const T a = 0.05;
-  const T amp = 1.0;//exp(-pow((z-0.6)/a,2.0));
+  const T amp = exp(-pow((z-0.6)/a,2.0));
 
   density = ( M*pow(sigma,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(sigma,2.0)));
 
@@ -38,10 +38,10 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
       alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*sigma));
   }
 
-  Ax = amp*cos(omega*(z + t));
-  nu = -amp*omega*sin(omega*(z + t));
-  Ay = amp*sin(omega*(z + t));
-  chi = amp*omega*cos(omega*(z + t));
+  Ax = amp*cos(2.0*pi*omega*(z + t));
+  nu = -amp*2.0*pi*omega*sin(2.0*pi*omega*(z + t));
+  Ay = amp*sin(2.0*pi*omega*(z + t));
+  chi = amp*2.0*pi*omega*cos(2.0*pi*omega*(z + t));
   Az = 0.0;
   psi = 0.0;
 
@@ -50,11 +50,11 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
     mu = 0.0;
   }
   else{
-    phi = 0.0;//2.0*M*amp*pow(omega,-1.0)*( x*sin(omega*(z + t)) - y*cos(omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
-        //- sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
+    phi = 2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*omega*(z + t)) - y*cos(2.0*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+        - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
 
-    mu = 0.0;//2.0*M*amp*( x*cos(omega*(z + t)) + y*sin(omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
-        //- sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
+    mu = 2.0*M*amp*( x*cos(2.0*pi*omega*(z + t)) + y*sin(2.0*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
+        - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
   }
 
   Ax_flat = Ax;

@@ -53,9 +53,9 @@ LightThroughDM::M = 0.5e-3
 LightThroughDM::sigma = 0.04660
 LightThroughDM::wave_amplitude = 1.0
 # k = 2 pi/sqrt(3)
-LightThroughDM::plane_wave_kx = 3.62759872847
-LightThroughDM::plane_wave_ky = 3.62759872847
-LightThroughDM::plane_wave_kz = 3.62759872847
+LightThroughDM::plane_wave_kx = 4.0
+LightThroughDM::plane_wave_ky = 4.0
+LightThroughDM::plane_wave_kz = 4.0
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.24
