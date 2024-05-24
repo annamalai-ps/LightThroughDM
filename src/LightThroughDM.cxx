@@ -17,7 +17,7 @@ constexpr int dim = 3;
 
 template <typename T>
 constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const T ky, const T kz,
-                             const T t, const T x, const T y, const T z, T &density, T &constraint,T &constraint_flat, 
+                             const T t, const T x, const T y, const T z, T &density,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
                              T &phi_flat, T &mu_flat, T &Ax_flat, T &nu_flat, T &Ay_flat, T &chi_flat, T &Az_flat, T &psi_flat) {
   using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
@@ -30,8 +30,6 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
   const T amp = exp(-pow((z-0.6)/a,2.0));
 
   density = ( M*pow(sigma,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(sigma,2.0)));
-  constraint = 0.0;
-  constraint_flat = 0.0;
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
       alpha = M*pow(sigma,-1.0)*sqrt(2.0/pi);      
@@ -80,7 +78,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
           
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
             plane_wave(M, sigma, wave_amplitude, plane_wave_kx, plane_wave_ky,
-                          plane_wave_kz, cctk_time, p.x, p.y, p.z, density(p.I), constraint_violation(p.I), constraint_violation_flat(p.I),
+                          plane_wave_kz, cctk_time, p.x, p.y, p.z, density(p.I),
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
                           phi_flat(p.I), mu_flat(p.I), Ax_flat(p.I), nu_flat(p.I), Ay_flat(p.I), chi_flat(p.I), Az_flat(p.I), psi_flat(p.I));
             
