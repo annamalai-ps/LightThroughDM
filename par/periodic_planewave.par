@@ -40,8 +40,8 @@ Cactus::cctk_final_time = 1.68
 CarpetX::ghost_size = 2
 
 # Set periodic boundaries:
-CarpetX::periodic_x = yes
-CarpetX::periodic_y = yes
+#CarpetX::periodic_x = yes
+#CarpetX::periodic_y = yes
 CarpetX::periodic_z = yes
 
 LightThroughDM::initial_condition = "plane wave"
