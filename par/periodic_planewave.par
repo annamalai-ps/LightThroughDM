@@ -11,7 +11,7 @@ $nlevels = 1
 $ncells = 128
 
 #change this when you change resolution,dtfac
-$out_every = 32
+$out_every = 64
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -33,7 +33,7 @@ CarpetX::max_num_levels = $nlevels
 #BoxInBox::radius_z_1[1] = 0.3
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 0.4
+Cactus::cctk_final_time = 1.68
 #Cactus::cctk_itlast = 3
 
 #Set ghost zones for 4th order finite difference method:
