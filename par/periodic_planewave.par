@@ -8,10 +8,10 @@ ActiveThorns = "
     CoordinatesX
 "
 $nlevels = 1
-$ncells = 128
+$ncells = 192
 
 #change this when you change resolution,dtfac
-$out_every = 64
+$out_every = 96
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -70,6 +70,21 @@ IO::out_every = $out_every
 #"
 
 CarpetX::out_silo_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+#    LightThroughDM::Az
+#    LightThroughDM::phi_flat
+#    LightThroughDM::Ax_flat
+#    LightThroughDM::Ay_flat
+#    LightThroughDM::Az_flat
+    
+    LightThroughDM::density
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+"
+
+#CarpetX::out_openpmd_vars = "
 #    LightThroughDM::phi
 #    LightThroughDM::Ax
 #    LightThroughDM::Ay
@@ -77,27 +92,12 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::phi_flat
 #    LightThroughDM::Ax_flat
 #    LightThroughDM::Ay_flat
-#    LightThroughDM::Az_flat
-    
-#    LightThroughDM::density
-    LightThroughDM::constraint
-    LightThroughDM::RMSError
-"
-
-CarpetX::out_openpmd_vars = "
-    LightThroughDM::phi
-    LightThroughDM::Ax
-    LightThroughDM::Ay
-    LightThroughDM::Az
-#    LightThroughDM::phi_flat
-#    LightThroughDM::Ax_flat
-#    LightThroughDM::Ay_flat
 #    LightThroughDM::Az_flat   
 #    LightThroughDM::density_pressure
-    LightThroughDM::constraint
+#    LightThroughDM::constraint
 #    LightThroughDM::RMSError
-    CoordinatesX::vertex_coords
-"
+#    CoordinatesX::vertex_coords
+#"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"
