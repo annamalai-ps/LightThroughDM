@@ -7,7 +7,17 @@ KEYWORD initial_condition "Initial condition"
   "plane wave" :: "plane wave"
 } "plane wave"
 
-CCTK_REAL wave_amplitude "Amplitude of plane wave"
+CCTK_REAL lambdaC_prefactor "Compton wavelength prefactor"
+{
+  *:* :: ""
+} 1.0
+
+CCTK_REAL plane_wave_dist_from_DM "plane wave distance from Dark Matter"
+{
+  *:* :: ""
+} 0.0
+
+CCTK_REAL gaussian_wavepacket_width "initial gaussian wavepacket width"
 {
   *:* :: ""
 } 1.0
@@ -27,18 +37,13 @@ CCTK_REAL plane_wave_kz "kz for plane wave"
   *:* :: ""
 } 0.5
 
-CCTK_REAL sigma "width of Gaussian density"
+CCTK_REAL M "Mass of dark matter particle"
 {
-  (0:* :: ""
-} 0.2
+  *:* :: ""
+} 0.001
 
 KEYWORD boundary_condition "Boundary condition"
 {
   "CarpetX" :: "Apply boundary conditions via CarpetX"
   "periodic" :: "Apply a reflecting boundary condition"
 } "periodic"
-
-CCTK_REAL M "Mass of dark matter particle"
-{
-  *:* :: ""
-} 0.001

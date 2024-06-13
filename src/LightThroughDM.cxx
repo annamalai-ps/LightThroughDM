@@ -16,26 +16,27 @@ constexpr int dim = 3;
 
 
 template <typename T>
-constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const T ky, const T kz,
+constexpr void plane_wave(const T M, const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
+                             const T kx, const T ky, const T kz,
                              const T t, const T x, const T y, const T z, T &density,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
                              T &phi_flat, T &mu_flat, T &Ax_flat, T &nu_flat, T &Ay_flat, T &chi_flat, T &Az_flat, T &psi_flat) {
   using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
 
   const T pi = acos(-T(1));
-  const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));;
+  const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
-  const T a = 0.05;
-  const T amp = exp(-pow((z-0.6)/a,2.0));
+  const T lambda = lambdaC_prefactor*(2*pi/M);
+  const T amp = exp(-pow((z+plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
 
-  density = ( M*pow(sigma,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(sigma,2.0)));
+  density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
-      alpha = M*pow(sigma,-1.0)*sqrt(2.0/pi);      
+      alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);      
   }
   else{
-      alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*sigma));
+      alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
   }
 
   Ax = amp*cos(2.0*pi*omega*(z + t));
@@ -50,11 +51,11 @@ constexpr void plane_wave(const T M, const T sigma, const T A, const T kx, const
     mu = 0.0;
   }
   else{
-    phi = 2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*omega*(z + t)) - y*cos(2.0*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
-        - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
+    phi = 2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*omega*(z + t)) - y*cos(2.0*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
+        - sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
 
-    mu = 2.0*M*amp*( x*cos(2.0*pi*omega*(z + t)) + y*sin(2.0*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*sigma))*r_inv_cubed
-        - sqrt(2/pi)*exp(-r_square/(2*pow(sigma,2.0)))/(sigma*r_square) );
+    mu = 2.0*M*amp*( x*cos(2.0*pi*omega*(z + t)) + y*sin(2.0*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
+        - sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
   }
 
   Ax_flat = Ax;
@@ -77,8 +78,9 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
-            plane_wave(M, sigma, wave_amplitude, plane_wave_kx, plane_wave_ky,
-                          plane_wave_kz, cctk_time, p.x, p.y, p.z, density(p.I),
+            plane_wave(M, lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
+                          plane_wave_kx, plane_wave_ky, plane_wave_kz,
+                          cctk_time, p.x, p.y, p.z, density(p.I),
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
                           phi_flat(p.I), mu_flat(p.I), Ax_flat(p.I), nu_flat(p.I), Ay_flat(p.I), chi_flat(p.I), Az_flat(p.I), psi_flat(p.I));
             
