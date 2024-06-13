@@ -46,7 +46,8 @@ CarpetX::ghost_size = 2
 # Set periodic boundaries:
 CarpetX::periodic_x = yes
 CarpetX::periodic_y = yes
-CarpetX::periodic_z = yes
+CarpetX::reflection_z = yes
+CarpetX::reflection_upper_z = yes
 
 LightThroughDM::initial_condition = "plane wave"
 LightThroughDM::boundary_condition = "periodic"
