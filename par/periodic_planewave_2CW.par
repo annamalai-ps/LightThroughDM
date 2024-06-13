@@ -9,10 +9,10 @@ ActiveThorns = "
 "
 $nlevels = 1
 #xy domain defined by 4% of alpha
-$xy_domain_min = -500.0 
-$xy_domain_max = 500.0
-$z_domain_min = -2000.0 
-$z_domain_max = 2000.0
+$xy_domain_min = -504.0 
+$xy_domain_max = 504.0
+$z_domain_min = -2016.0 
+$z_domain_max = 2016.0
 
 #change this when you change resolution,dtfac
 $out_every = 150
