@@ -28,7 +28,7 @@ constexpr void plane_wave(const T M, const T lambdaC_prefactor, const T plane_wa
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
   const T lambda = lambdaC_prefactor*(2*pi/M);
-  const T amp = exp(-pow((z+plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
+  const T amp = exp(-pow((z-plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
 
   density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
