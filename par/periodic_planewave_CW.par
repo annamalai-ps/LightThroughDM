@@ -11,7 +11,7 @@ $nlevels = 1
 $xy_domain_min = -600.0
 $xy_domain_max = 600.0 
 $z_domain_min = -1200.0 
-$z_domain_max = 1200.0 
+$z_domain_max = 1200.0
 
 #change this when you change resolution,dtfac
 $out_every = 12
@@ -25,12 +25,12 @@ CarpetX::ncells_x = 64
 CarpetX::ncells_y = 64
 CarpetX::ncells_z = 256
 
-CarpetX::xmin = xy_domain_min
-CarpetX::xmax = xy_domain_max
-CarpetX::ymin = xy_domain_min
-CarpetX::ymax = xy_domain_max
-CarpetX::zmin = z_domain_min
-CarpetX::zmax = z_domain_max
+CarpetX::xmin = $xy_domain_min
+CarpetX::xmax = $xy_domain_max
+CarpetX::ymin = $xy_domain_min
+CarpetX::ymax = $xy_domain_max
+CarpetX::zmin = $z_domain_min
+CarpetX::zmax = $z_domain_max
 
 
 CarpetX::max_num_levels = $nlevels
