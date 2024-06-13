@@ -8,11 +8,13 @@ ActiveThorns = "
     CoordinatesX
 "
 $nlevels = 1
-$xy_domain_max_extent = 600.0 
-$z_domain_max_extent = 1200.0 
+$xy_domain_min = -600.0
+$xy_domain_max = 600.0 
+$z_domain_min = -1200.0 
+$z_domain_max = 1200.0 
 
 #change this when you change resolution,dtfac
-$out_every = 120
+$out_every = 12
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -23,18 +25,18 @@ CarpetX::ncells_x = 64
 CarpetX::ncells_y = 64
 CarpetX::ncells_z = 256
 
-CarpetX::xmin = -xy_domain_max_extent
-CarpetX::xmax = xy_domain_max_extent
-CarpetX::ymin = -xy_domain_max_extent
-CarpetX::ymax = xy_domain_max_extent
-CarpetX::zmin = -z_domain_max_extent
-CarpetX::zmax = z_domain_max_extent
+CarpetX::xmin = xy_domain_min
+CarpetX::xmax = xy_domain_max
+CarpetX::ymin = xy_domain_min
+CarpetX::ymax = xy_domain_max
+CarpetX::zmin = z_domain_min
+CarpetX::zmax = z_domain_max
 
 
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 2000
+Cactus::cctk_final_time = 200
 #Cactus::cctk_itlast = 3
 
 #Set ghost zones for 4th order finite difference method:
