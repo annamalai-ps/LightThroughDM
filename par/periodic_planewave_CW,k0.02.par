@@ -8,26 +8,24 @@ ActiveThorns = "
     CoordinatesX
 "
 
-#Simulation run time 800 core hours
-
 $nlevels = 1
 #xy domain defined by 4% of alpha amplitude
-$xy_domain_min = -225.0
-$xy_domain_max = 225.0
-$z_domain_min = -900.0
-$z_domain_max = 900.0
+$xy_domain_min = -300.0
+$xy_domain_max = 300.0
+$z_domain_min = -950.0
+$z_domain_max = 950.0
 
 #change this when you change resolution,dtfac
-$out_every = 576
+$out_every = 100
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
 
 CarpetX::poison_undefined_values = yes
 
-CarpetX::ncells_x = 72
-CarpetX::ncells_y = 72
-CarpetX::ncells_z = 2880
+CarpetX::ncells_x = 84
+CarpetX::ncells_y = 84
+CarpetX::ncells_z = 672
 
 CarpetX::xmin = $xy_domain_min
 CarpetX::xmax = $xy_domain_max
@@ -40,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 1800
+Cactus::cctk_final_time = 1900
 #Cactus::cctk_itlast = 3
 
 #Set ghost zones for 4th order finite difference method:
@@ -58,17 +56,17 @@ LightThroughDM::boundary_condition = "periodic"
 # Physics parameters
 LightThroughDM::M = 0.887400978862
 LightThroughDM::lambdaC_prefactor = 1.0
-LightThroughDM::gaussian_wavepacket_width = 4.0
+LightThroughDM::gaussian_wavepacket_width = 20.0
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 1%
 LightThroughDM::plane_wave_dist_from_DM = 850.0
 
-LightThroughDM::plane_wave_kx = 0.1
-LightThroughDM::plane_wave_ky = 0.1
-LightThroughDM::plane_wave_kz = 0.1
+LightThroughDM::plane_wave_kx = 0.02
+LightThroughDM::plane_wave_ky = 0.02
+LightThroughDM::plane_wave_kz = 0.02
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.5
+CarpetX::dtfac = 0.672
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
