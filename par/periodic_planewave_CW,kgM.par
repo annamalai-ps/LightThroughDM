@@ -54,16 +54,16 @@ LightThroughDM::initial_condition = "plane wave"
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
-LightThroughDM::M = 0.000125331413732
-LightThroughDM::lambdaC_prefactor = 1.0
+LightThroughDM::M = 0.000396857782407
+LightThroughDM::lambdaC_prefactor = 2e-7
 LightThroughDM::gaussian_wavepacket_width = 0.02
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.05%
 LightThroughDM::plane_wave_dist_from_DM = 0.33
 
-LightThroughDM::plane_wave_kx = 25.0662827463
-LightThroughDM::plane_wave_ky = 25.0662827463
-LightThroughDM::plane_wave_kz = 25.0662827463
+LightThroughDM::plane_wave_kx = 19.8428891204
+LightThroughDM::plane_wave_ky = 19.8428891204
+LightThroughDM::plane_wave_kz = 19.8428891204
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.672
@@ -92,20 +92,20 @@ CarpetX::out_silo_vars = "
     LightThroughDM::RMSError
 "
 
-CarpetX::out_openpmd_vars = "
-    LightThroughDM::phi
-    LightThroughDM::Ax
-    LightThroughDM::Ay
-    LightThroughDM::Az
-    LightThroughDM::phi_flat
-    LightThroughDM::Ax_flat
-    LightThroughDM::Ay_flat
-    LightThroughDM::Az_flat   
-    LightThroughDM::density_pressure
-    LightThroughDM::constraint
-    LightThroughDM::RMSError
-    CoordinatesX::vertex_coords
-"
+#CarpetX::out_openpmd_vars = "
+#    LightThroughDM::phi
+#    LightThroughDM::Ax
+#    LightThroughDM::Ay
+#    LightThroughDM::Az
+#    LightThroughDM::phi_flat
+#    LightThroughDM::Ax_flat
+#    LightThroughDM::Ay_flat
+#    LightThroughDM::Az_flat   
+#    LightThroughDM::density_pressure
+#    LightThroughDM::constraint
+#    LightThroughDM::RMSError
+#    CoordinatesX::vertex_coords
+#"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"
