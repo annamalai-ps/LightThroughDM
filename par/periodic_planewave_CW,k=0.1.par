@@ -7,6 +7,9 @@ ActiveThorns = "
     LightThroughDM
     CoordinatesX
 "
+
+#Simulation run time 800 core hours
+
 $nlevels = 1
 #xy domain defined by 4% of alpha amplitude
 $xy_domain_min = -225.0
