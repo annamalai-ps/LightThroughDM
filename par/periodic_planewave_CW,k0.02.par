@@ -23,8 +23,8 @@ Cactus::presync_mode = "mixed-error"
 
 CarpetX::poison_undefined_values = yes
 
-CarpetX::ncells_x = 84
-CarpetX::ncells_y = 84
+CarpetX::ncells_x = 96
+CarpetX::ncells_y = 96
 CarpetX::ncells_z = 672
 
 CarpetX::xmin = $xy_domain_min
