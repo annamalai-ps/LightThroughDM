@@ -33,11 +33,10 @@ CCTK_REAL state_flat TYPE=gf TAGS='rhs="rhs_flat"'
   psi_flat
 } "flat state vector"
 
-CCTK_REAL density TYPE=gf
+CCTK_REAL alpha TYPE=gf
 {
-  density
   alpha
-} "density function"
+} "alpha function"
 
 CCTK_REAL rhs TYPE=gf TAGS='checkpoint="no"'
 {

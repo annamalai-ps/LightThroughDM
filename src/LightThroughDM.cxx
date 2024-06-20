@@ -16,9 +16,9 @@ constexpr int dim = 3;
 
 
 template <typename T>
-constexpr void plane_wave(const T M, const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
+constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
                              const T kx, const T ky, const T kz,
-                             const T t, const T x, const T y, const T z, T &density,
+                             const T t, const T x, const T y, const T z,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
                              T &phi_flat, T &mu_flat, T &Ax_flat, T &nu_flat, T &Ay_flat, T &chi_flat, T &Az_flat, T &psi_flat) {
   using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
@@ -27,10 +27,12 @@ constexpr void plane_wave(const T M, const T lambdaC_prefactor, const T plane_wa
   const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
   const T r_inv_cubed = pow((pow(x,2.0)+pow(y,2.0)+pow(z,2.0)),-1.5);
   const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
+  const T alpha_max = 0.1;
+  const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
   const T amp = exp(-pow((z-plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
 
-  density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
+  //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
       alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);      
@@ -78,9 +80,9 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
-            plane_wave(M, lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
+            plane_wave(lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
                           plane_wave_kx, plane_wave_ky, plane_wave_kz,
-                          cctk_time, p.x, p.y, p.z, density(p.I),
+                          cctk_time, p.x, p.y, p.z,
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
                           phi_flat(p.I), mu_flat(p.I), Ax_flat(p.I), nu_flat(p.I), Ay_flat(p.I), chi_flat(p.I), Az_flat(p.I), psi_flat(p.I));
             
@@ -182,31 +184,27 @@ extern "C" void LightThroughDM_RHS(CCTK_ARGUMENTS) {
 
           phi_rhs(p.I) = mu(p.I);
           mu_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_phi[0] + dd_phi[1] + dd_phi[2])
-                        -phi(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
+                        - 2.0*phi(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[0]*nu(p.I) + d_alpha[1]*chi(p.I) + d_alpha[2]*psi(p.I))
-                        - 2.0*(d_alpha[0]*d_phi[0] + d_alpha[1]*d_phi[1] + d_alpha[2]*d_phi[2])
-                        + 4.0*M_PI*density(p.I)*phi(p.I) );
+                        - 2.0*(d_alpha[0]*d_phi[0] + d_alpha[1]*d_phi[1] + d_alpha[2]*d_phi[2]) );
           Ax_rhs(p.I) = nu(p.I);
           nu_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_Ax[0] + dd_Ax[1] + dd_Ax[2])
-                        + Ax(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
+                        + 2.0*Ax(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[2]*d_Az[0] + d_alpha[1]*d_Ay[0])
                         - 2.0*d_alpha[0]*(-mu(p.I) + d_Ay[1] + d_Az[2])
-                        + 2.0*(d_alpha[0]*d_Ax[0] + d_alpha[1]*d_Ax[1] + d_alpha[2]*d_Ax[2])
-                        - 4.0*M_PI*density(p.I)*Ax(p.I) );
+                        + 2.0*(d_alpha[0]*d_Ax[0] + d_alpha[1]*d_Ax[1] + d_alpha[2]*d_Ax[2]) );
           Ay_rhs(p.I) = chi(p.I);
           chi_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_Ay[0] + dd_Ay[1] + dd_Ay[2])
-                        + Ay(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
+                        + 2.0*Ay(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[0]*d_Ax[1] + d_alpha[2]*d_Az[1])
                         - 2.0*d_alpha[1]*(-mu(p.I) + d_Ax[0] + d_Az[2])
-                        + 2.0*(d_alpha[0]*d_Ay[0] + d_alpha[1]*d_Ay[1] + d_alpha[2]*d_Ay[2])
-                        - 4.0*M_PI*density(p.I)*Ay(p.I) );  
+                        + 2.0*(d_alpha[0]*d_Ay[0] + d_alpha[1]*d_Ay[1] + d_alpha[2]*d_Ay[2]) );  
           Az_rhs(p.I) = psi(p.I);
           psi_rhs(p.I) = pow(1 + 2.0*alpha(p.I),-1.0)*( (1 - 2.0*alpha(p.I))*(dd_Az[0] + dd_Az[1] + dd_Az[2])
-                        + Az(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
+                        + 2.0*Az(p.I)*(dd_alpha[0]+dd_alpha[1]+dd_alpha[2])
                         + 2.0*(d_alpha[0]*d_Ax[2] + d_alpha[1]*d_Ay[2])
                         - 2.0*d_alpha[2]*(-mu(p.I) + d_Ax[0] + d_Ay[1])
-                        + 2.0*(d_alpha[0]*d_Az[0] + d_alpha[1]*d_Az[1] + d_alpha[2]*d_Az[2])
-                        - 4.0*M_PI*density(p.I)*Az(p.I) );
+                        + 2.0*(d_alpha[0]*d_Az[0] + d_alpha[1]*d_Az[1] + d_alpha[2]*d_Az[2]) );
         });
   
   } else {

@@ -54,8 +54,6 @@ LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 
-# M defined by maximum amplitude of alpha=0.1
-LightThroughDM::M = 0.887400978862
 LightThroughDM::lambdaC_prefactor = 2.0
 LightThroughDM::gaussian_wavepacket_width = 20.0
 
@@ -74,7 +72,7 @@ IO::out_every = $out_every
 
 #CarpetX::out_tsv_vars = "
 #    LightThroughDM::state
-#    LightThroughDM::density
+#    LightThroughDM::alpha
 #    LightThroughDM::constraint
 #"
 
@@ -88,7 +86,7 @@ CarpetX::out_silo_vars = "
     LightThroughDM::Ay_flat
     LightThroughDM::Az_flat
     
-    LightThroughDM::density
+    LightThroughDM::alpha
     LightThroughDM::constraint
     LightThroughDM::RMSError
 "
@@ -102,7 +100,7 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::Ax_flat
 #    LightThroughDM::Ay_flat
 #    LightThroughDM::Az_flat   
-#    LightThroughDM::density_pressure
+#    LightThroughDM::alpha
 #    LightThroughDM::constraint
 #    LightThroughDM::RMSError
 #    CoordinatesX::vertex_coords

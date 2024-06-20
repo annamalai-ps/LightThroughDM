@@ -37,11 +37,6 @@ CCTK_REAL plane_wave_kz "kz for plane wave"
   *:* :: ""
 } 0.5
 
-CCTK_REAL M "Mass of dark matter particle"
-{
-  *:* :: ""
-} 0.001
-
 KEYWORD boundary_condition "Boundary condition"
 {
   "CarpetX" :: "Apply boundary conditions via CarpetX"

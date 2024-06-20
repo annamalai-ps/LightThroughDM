@@ -54,7 +54,6 @@ LightThroughDM::initial_condition = "plane wave"
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
-LightThroughDM::M = 0.887400978862
 LightThroughDM::lambdaC_prefactor = 1.0
 LightThroughDM::gaussian_wavepacket_width = 20.0
 
@@ -87,7 +86,7 @@ CarpetX::out_silo_vars = "
     LightThroughDM::Ay_flat
     LightThroughDM::Az_flat
     
-    LightThroughDM::density
+    LightThroughDM::alpha
     LightThroughDM::constraint
     LightThroughDM::RMSError
 "
@@ -101,7 +100,7 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::Ax_flat
 #    LightThroughDM::Ay_flat
 #    LightThroughDM::Az_flat   
-#    LightThroughDM::density_pressure
+#    LightThroughDM::alpha
 #    LightThroughDM::constraint
 #    LightThroughDM::RMSError
 #    CoordinatesX::vertex_coords
