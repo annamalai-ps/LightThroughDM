@@ -1,0 +1,112 @@
+ActiveThorns = "
+    CarpetX
+    IOUtil
+    ODESolvers
+    TimerReport
+    BoxInBox
+    LightThroughDM
+    CoordinatesX
+"
+
+$nlevels = 1
+#xy domain defined by 4% of alpha amplitude
+$xy_domain_min = -5.0
+$xy_domain_max = 5.0
+$z_domain_min = -28.0
+$z_domain_max = 28.0
+
+#change this when you change resolution,dtfac
+$out_every = 66
+
+Cactus::cctk_show_schedule = no
+Cactus::presync_mode = "mixed-error"
+
+CarpetX::poison_undefined_values = yes
+
+CarpetX::ncells_x = 64
+CarpetX::ncells_y = 64
+CarpetX::ncells_z = 512
+
+CarpetX::xmin = $xy_domain_min
+CarpetX::xmax = $xy_domain_max
+CarpetX::ymin = $xy_domain_min
+CarpetX::ymax = $xy_domain_max
+CarpetX::zmin = $z_domain_min
+CarpetX::zmax = $z_domain_max
+
+
+CarpetX::max_num_levels = $nlevels
+
+Cactus::terminate = "time"
+Cactus::cctk_final_time = 55.0
+#Cactus::cctk_itlast = 3
+
+#Set ghost zones for 4th order finite difference method:
+CarpetX::ghost_size = 2
+
+# Set periodic boundaries:
+CarpetX::periodic_x = yes
+CarpetX::periodic_y = yes
+CarpetX::reflection_z = yes
+CarpetX::reflection_upper_z = yes
+
+LightThroughDM::initial_condition = "plane wave"
+LightThroughDM::boundary_condition = "periodic"
+
+# Physics parameters
+LightThroughDM::lambdaC_prefactor = 0.0005
+LightThroughDM::gaussian_wavepacket_width = 1.0
+
+#plane_wave_dist_from_DM defined at z where alpha amplitude gets 1%
+LightThroughDM::plane_wave_dist_from_DM = 23.0
+
+LightThroughDM::plane_wave_kx = 0.0229125947503
+LightThroughDM::plane_wave_ky = 0.0229125947503
+LightThroughDM::plane_wave_kz = 0.0229125947503
+
+ODESolvers::method = "RK4"
+CarpetX::dtfac = 0.5
+
+IO::out_dir = $parfile
+IO::out_every = $out_every
+
+#CarpetX::out_tsv_vars = "
+#    LightThroughDM::state
+#    LightThroughDM::density
+#    LightThroughDM::constraint
+#"
+
+CarpetX::out_silo_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+    LightThroughDM::phi_flat
+    LightThroughDM::Ax_flat
+    LightThroughDM::Ay_flat
+    LightThroughDM::Az_flat
+    
+    LightThroughDM::alpha
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+"
+
+#CarpetX::out_openpmd_vars = "
+#    LightThroughDM::phi
+#    LightThroughDM::Ax
+#    LightThroughDM::Ay
+#    LightThroughDM::Az
+#    LightThroughDM::phi_flat
+#    LightThroughDM::Ax_flat
+#    LightThroughDM::Ay_flat
+#    LightThroughDM::Az_flat   
+#    LightThroughDM::alpha
+#    LightThroughDM::constraint
+#    LightThroughDM::RMSError
+#    CoordinatesX::vertex_coords
+#"
+
+TimerReport::out_every = $out_every
+TimerReport::out_filename = "TimerReport"
+TimerReport::output_schedule_timers = no
+TimerReport::n_top_timers = 100
