@@ -9,14 +9,14 @@ ActiveThorns = "
 "
 
 $nlevels = 1
-#xy domain defined by 4% of alpha amplitude
-$xy_domain_min = -5.0
-$xy_domain_max = 5.0
+#xy domain defined by 3% of alpha amplitude
+$xy_domain_min = -7.0
+$xy_domain_max = 7.0
 $z_domain_min = -28.0
 $z_domain_max = 28.0
 
 #change this when you change resolution,dtfac
-$out_every = 66
+$out_every = 64
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 55.0
+Cactus::cctk_final_time = 56.0
 #Cactus::cctk_itlast = 3
 
 #Set ghost zones for 4th order finite difference method:
@@ -76,22 +76,7 @@ IO::out_every = $out_every
 #    LightThroughDM::constraint
 #"
 
-CarpetX::out_silo_vars = "
-    LightThroughDM::phi
-    LightThroughDM::Ax
-    LightThroughDM::Ay
-    LightThroughDM::Az
-    LightThroughDM::phi_flat
-    LightThroughDM::Ax_flat
-    LightThroughDM::Ay_flat
-    LightThroughDM::Az_flat
-    
-    LightThroughDM::alpha
-    LightThroughDM::constraint
-    LightThroughDM::RMSError
-"
-
-#CarpetX::out_openpmd_vars = "
+#CarpetX::out_silo_vars = "
 #    LightThroughDM::phi
 #    LightThroughDM::Ax
 #    LightThroughDM::Ay
@@ -99,12 +84,29 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::phi_flat
 #    LightThroughDM::Ax_flat
 #    LightThroughDM::Ay_flat
-#    LightThroughDM::Az_flat   
+#    LightThroughDM::Az_flat
+#    
 #    LightThroughDM::alpha
 #    LightThroughDM::constraint
 #    LightThroughDM::RMSError
-#    CoordinatesX::vertex_coords
 #"
+
+CarpetX::openpmd_format = "ADIOS2_BP4"
+
+CarpetX::out_openpmd_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+    LightThroughDM::phi_flat
+    LightThroughDM::Ax_flat
+    LightThroughDM::Ay_flat
+    LightThroughDM::Az_flat   
+    LightThroughDM::alpha
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+    CoordinatesX::vertex_coords
+"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"
