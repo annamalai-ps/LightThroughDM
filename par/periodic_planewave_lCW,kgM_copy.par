@@ -12,8 +12,8 @@ $nlevels = 1
 #xy domain defined by 3% of alpha amplitude
 $xy_domain_min = -7.0
 $xy_domain_max = 7.0
-$z_domain_min = -78.0
-$z_domain_max = -18.0
+$z_domain_min = 78.0
+$z_domain_max = 18.0
 
 #change this when you change resolution,dtfac
 $out_every = 64
@@ -37,9 +37,9 @@ CarpetX::zmax = $z_domain_max
 
 CarpetX::max_num_levels = $nlevels
 
-Cactus::terminate = "time"
-Cactus::cctk_final_time = 60.0
-#Cactus::cctk_itlast = 3
+#Cactus::terminate = "time"
+#Cactus::cctk_final_time = 60.0
+Cactus::cctk_itlast = 1
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2
