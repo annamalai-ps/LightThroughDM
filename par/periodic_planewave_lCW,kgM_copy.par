@@ -16,7 +16,7 @@ $z_domain_min = -78.0
 $z_domain_max = -18.0
 
 #change this when you change resolution,dtfac
-$out_every = 1
+$out_every = 128
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -37,9 +37,9 @@ CarpetX::zmax = $z_domain_max
 
 CarpetX::max_num_levels = $nlevels
 
-#Cactus::terminate = "time"
-#Cactus::cctk_final_time = 60.0
-Cactus::cctk_itlast = 1
+Cactus::terminate = "time"
+Cactus::cctk_final_time = 60.0
+#Cactus::cctk_itlast = 1
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2
@@ -65,7 +65,7 @@ LightThroughDM::plane_wave_ky = 0.0229125947503
 LightThroughDM::plane_wave_kz = 0.0229125947503
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.5
+CarpetX::dtfac = 0.75
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
