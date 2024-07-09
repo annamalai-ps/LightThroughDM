@@ -16,7 +16,7 @@ $z_domain_min = -28.0
 $z_domain_max = 28.0
 
 #change this when you change resolution,dtfac
-$out_every = 64
+$out_every = 25
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -37,9 +37,9 @@ CarpetX::zmax = $z_domain_max
 
 CarpetX::max_num_levels = $nlevels
 
-Cactus::terminate = "time"
-Cactus::cctk_final_time = 56.0
-#Cactus::cctk_itlast = 3
+#Cactus::terminate = "time"
+#Cactus::cctk_final_time = 56.0
+Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2

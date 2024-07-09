@@ -42,7 +42,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   }
 
   Ax = amp*cos(2.0*pi*omega*(z + t));
-  nu = -amp*2.0*pi*omega*sin(2.0*pi*omega*(z + t));
+  nu = -2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*omega*(z + t)) + pi*omega*pow(gaussian_wavepacket_width,2.0)*sin(2.0*pi*omega*(z + t)) ); //-amp*2.0*pi*omega*sin(2.0*pi*omega*(z + t));
   Ay = amp*sin(2.0*pi*omega*(z + t));
   chi = amp*2.0*pi*omega*cos(2.0*pi*omega*(z + t));
   Az = 0.0;
