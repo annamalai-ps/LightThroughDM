@@ -58,7 +58,7 @@ LightThroughDM::lambdaC_prefactor = 0.0005
 LightThroughDM::gaussian_wavepacket_width = 1.0
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.75%
-LightThroughDM::plane_wave_dist_from_DM = -43.0
+LightThroughDM::plane_wave_dist_from_DM = 43.0
 
 LightThroughDM::plane_wave_kx = 0.0229125947503
 LightThroughDM::plane_wave_ky = 0.0229125947503
