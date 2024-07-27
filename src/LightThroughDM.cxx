@@ -111,18 +111,18 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
     const T a = d_alp1*dr - (alp2 - alp1);
     const T b = -d_alp2*dr + (alp2 - alp1);
     
-    alpha = (1-t)alp1 + t*alp2 + t*(1-t)*( a*(1-t) + b*t );
+    alpha = (1-t)*alp1 + t*alp2 + t*(1-t)*( a*(1-t) + b*t );
   }
   else if (r>r2){
     alpha = 0.0;
   }
 
-  Ax = amp*cos(2.0*pi*omega*(z + t));
-  nu = -2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*omega*(z + t)) 
-                                                        + pi*omega*pow(gaussian_wavepacket_width,2.0)*sin(2.0*pi*omega*(z + t)) );
-  Ay = amp*sin(2.0*pi*omega*(z + t));
-  chi = 2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( pi*omega*pow(gaussian_wavepacket_width,2.0)*cos(2.0*pi*omega*(z + t)) 
-                                                        -(z - plane_wave_dist_from_DM)*sin(2.0*pi*omega*(z + t))  );
+  Ax = amp*cos(2.0*pi*omega*(z + time));
+  nu = -2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*omega*(z + time)) 
+                                                        + pi*omega*pow(gaussian_wavepacket_width,2.0)*sin(2.0*pi*omega*(z + time)) );
+  Ay = amp*sin(2.0*pi*omega*(z + time));
+  chi = 2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( pi*omega*pow(gaussian_wavepacket_width,2.0)*cos(2.0*pi*omega*(z + time)) 
+                                                        -(z - plane_wave_dist_from_DM)*sin(2.0*pi*omega*(z + time))  );
   Az = 0.0;
   psi = 0.0;
   phi = 0.0;
