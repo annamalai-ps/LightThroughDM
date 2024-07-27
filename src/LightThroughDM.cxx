@@ -73,7 +73,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
 
 }
 
-
+template <typename T>
 constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
                              const T kx, const T ky, const T kz,
                              const T time, const T x, const T y, const T z,
