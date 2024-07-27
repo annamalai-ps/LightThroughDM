@@ -2,9 +2,8 @@
 
 KEYWORD initial_condition "Initial condition"
 {
-  "standing wave" :: "Standing wave"
-  "Gaussian" :: "Gaussian"
   "plane wave" :: "plane wave"
+  "spline_alpha" :: "spline_alpha"
 } "plane wave"
 
 CCTK_REAL lambdaC_prefactor "Compton wavelength prefactor"

@@ -35,10 +35,10 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
-      alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);      
+      alpha = -M*pow(lambda,-1.0)*sqrt(2.0/pi);      
   }
   else{
-      alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
+      alpha = -M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
   }
 
   Ax = amp*cos(2.0*pi*omega*(z + t));
@@ -73,6 +73,72 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
 
 }
 
+
+constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
+                             const T kx, const T ky, const T kz,
+                             const T time, const T x, const T y, const T z,
+                             T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
+                             T &phi_flat, T &mu_flat, T &Ax_flat, T &nu_flat, T &Ay_flat, T &chi_flat, T &Az_flat, T &psi_flat) {
+  using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
+
+  const T pi = acos(-T(1));
+  const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
+  const T r_square = pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0);
+  const T alpha_max = 0.1;
+  const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
+  const T lambda = lambdaC_prefactor*(2*pi/M);
+  const T amp = exp(-pow((z-plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
+  //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
+
+
+  const T r = sqrt(r_square);
+  const T r1 = M/(0.01*alpha_max); // 0.1%
+  const T r2 = M/(0.0075*alpha_max); //0.075%
+  
+  if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
+    alpha = -M*pow(lambda,-1.0)*sqrt(2.0/pi);
+  }
+  else if (r <= r1) {
+    alpha = -M*pow(r,-1.0)*erf(r/(sqrt(2.0)*lambda));
+  }
+  else if (r<=r2 && r>=r1){
+    const T dr = r2 - r1;
+    const T t = (r - r1)/dr;
+    const T alp1 = -M*pow(r1,-1.0)*erf(r1/(sqrt(2.0)*lambda));
+    const T d_alp1 = (M*pow(r1,-2.0))*( erf(r1/(sqrt(2.0)*lambda)) - pow(lambda,-1.0)*sqrt(2/pi)*r1*exp(-(pow(r1,2.0)/(2*pow(lambda,2.0))) ) );
+    const T alp2 = 0.0;
+    const T d_alp2 = 0.0;
+    const T a = d_alp1*dr - (alp2 - alp1);
+    const T b = -d_alp2*dr + (alp2 - alp1);
+    
+    alpha = (1-t)alp1 + t*alp2 + t*(1-t)*( a*(1-t) + b*t );
+  }
+  else if (r>r2){
+    alpha = 0.0;
+  }
+
+  Ax = amp*cos(2.0*pi*omega*(z + t));
+  nu = -2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*omega*(z + t)) 
+                                                        + pi*omega*pow(gaussian_wavepacket_width,2.0)*sin(2.0*pi*omega*(z + t)) );
+  Ay = amp*sin(2.0*pi*omega*(z + t));
+  chi = 2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( pi*omega*pow(gaussian_wavepacket_width,2.0)*cos(2.0*pi*omega*(z + t)) 
+                                                        -(z - plane_wave_dist_from_DM)*sin(2.0*pi*omega*(z + t))  );
+  Az = 0.0;
+  psi = 0.0;
+  phi = 0.0;
+  mu = 0.0;
+
+  Ax_flat = Ax;
+  nu_flat = nu;
+  Ay_flat = Ay;
+  chi_flat = chi;
+  Az_flat = Az;
+  psi_flat = psi;
+  phi_flat = 0.0;
+  mu_flat = 0.0;
+
+}
+
 extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_Initial;
   DECLARE_CCTK_PARAMETERS;
@@ -83,6 +149,14 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
           
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
             plane_wave(lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
+                          plane_wave_kx, plane_wave_ky, plane_wave_kz,
+                          cctk_time, p.x, p.y, p.z,
+                          phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
+                          phi_flat(p.I), mu_flat(p.I), Ax_flat(p.I), nu_flat(p.I), Ay_flat(p.I), chi_flat(p.I), Az_flat(p.I), psi_flat(p.I));
+            
+          }
+          else if (CCTK_EQUALS(initial_condition, "spline_alpha")) {
+            spline_alpha(lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
                           plane_wave_kx, plane_wave_ky, plane_wave_kz,
                           cctk_time, p.x, p.y, p.z,
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
