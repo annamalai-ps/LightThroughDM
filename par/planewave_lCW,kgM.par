@@ -12,8 +12,8 @@ $nlevels = 1
 #xy domain defined by 3% of alpha amplitude
 $xy_domain_min = -7.0
 $xy_domain_max = 7.0
-$z_domain_min = -28.0
-$z_domain_max = 28.0
+$z_domain_min = -36.0
+$z_domain_max = 36.0
 
 #change this when you change resolution,dtfac
 $out_every = 64
@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 56.0
+Cactus::cctk_final_time = 70.0
 #Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
@@ -57,8 +57,8 @@ LightThroughDM::boundary_condition = "periodic"
 LightThroughDM::lambdaC_prefactor = 0.0005
 LightThroughDM::gaussian_wavepacket_width = 1.0
 
-#plane_wave_dist_from_DM defined at z where alpha amplitude gets 1%
-LightThroughDM::plane_wave_dist_from_DM = 23.0
+#plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
+LightThroughDM::plane_wave_dist_from_DM = 32.0
 
 LightThroughDM::plane_wave_kx = 0.0229125947503
 LightThroughDM::plane_wave_ky = 0.0229125947503
@@ -91,21 +91,20 @@ CarpetX::out_silo_vars = "
     LightThroughDM::RMSError
 "
 
-#CarpetX::openpmd_format = "ADIOS2_BP4"
-#CarpetX::out_openpmd_vars = "
-#    LightThroughDM::phi
-#    LightThroughDM::Ax
-#    LightThroughDM::Ay
-#    LightThroughDM::Az
-#    LightThroughDM::phi_flat
-#    LightThroughDM::Ax_flat
-#    LightThroughDM::Ay_flat
-#    LightThroughDM::Az_flat   
-#    LightThroughDM::alpha
-#    LightThroughDM::constraint
-#    LightThroughDM::RMSError
-#    CoordinatesX::vertex_coords
-#"
+CarpetX::out_openpmd_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+    LightThroughDM::phi_flat
+    LightThroughDM::Ax_flat
+    LightThroughDM::Ay_flat
+    LightThroughDM::Az_flat   
+    LightThroughDM::alpha
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+    CoordinatesX::vertex_coords
+"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"

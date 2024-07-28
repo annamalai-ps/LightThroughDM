@@ -91,21 +91,20 @@ CarpetX::out_silo_vars = "
     LightThroughDM::RMSError
 "
 
-#CarpetX::openpmd_format = "ADIOS2_BP4"
-#CarpetX::out_openpmd_vars = "
-#    LightThroughDM::phi
-#    LightThroughDM::Ax
-#    LightThroughDM::Ay
-#    LightThroughDM::Az
-#    LightThroughDM::phi_flat
-#    LightThroughDM::Ax_flat
-#    LightThroughDM::Ay_flat
-#    LightThroughDM::Az_flat   
-#    LightThroughDM::alpha
-#    LightThroughDM::constraint
-#    LightThroughDM::RMSError
-#    CoordinatesX::vertex_coords
-#"
+CarpetX::out_openpmd_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+    LightThroughDM::phi_flat
+    LightThroughDM::Ax_flat
+    LightThroughDM::Ay_flat
+    LightThroughDM::Az_flat   
+    LightThroughDM::alpha
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+    CoordinatesX::vertex_coords
+"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"
