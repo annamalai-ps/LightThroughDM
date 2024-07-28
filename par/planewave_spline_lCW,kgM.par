@@ -23,9 +23,9 @@ Cactus::presync_mode = "mixed-error"
 
 CarpetX::poison_undefined_values = yes
 
-CarpetX::ncells_x = 128
-CarpetX::ncells_y = 128
-CarpetX::ncells_z = 1024
+CarpetX::ncells_x = 64
+CarpetX::ncells_y = 64
+CarpetX::ncells_z = 512
 
 CarpetX::xmin = $xy_domain_min
 CarpetX::xmax = $xy_domain_max
