@@ -35,10 +35,10 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
-      alpha = -M*pow(lambda,-1.0)*sqrt(2.0/pi);      
+      alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);      
   }
   else{
-      alpha = -M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
+      alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
   }
 
   Ax = amp*cos(2.0*pi*omega*(z + t));
@@ -96,10 +96,10 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T r2 = M/(0.0075*alpha_max); //0.075%
   
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
-    alpha = -M*pow(lambda,-1.0)*sqrt(2.0/pi);
+    alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
   }
   else if (r <= r1) {
-    alpha = -M*pow(r,-1.0)*erf(r/(sqrt(2.0)*lambda));
+    alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*lambda));
   }
   else if (r<=r2 && r>=r1){
     const T dr = r2 - r1;
