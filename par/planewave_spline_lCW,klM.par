@@ -16,7 +16,7 @@ $z_domain_min = -228.0
 $z_domain_max = 228.0
 
 #change this when you change resolution,dtfac
-$out_every = 132
+$out_every = 142
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -25,7 +25,7 @@ CarpetX::poison_undefined_values = yes
 
 CarpetX::ncells_x = 64
 CarpetX::ncells_y = 64
-CarpetX::ncells_z = 1425
+CarpetX::ncells_z = 1536
 
 CarpetX::xmin = $xy_domain_min
 CarpetX::xmax = $xy_domain_max
