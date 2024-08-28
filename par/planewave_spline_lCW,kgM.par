@@ -12,11 +12,11 @@ $nlevels = 1
 #xy domain defined by 3% of alpha amplitude
 $xy_domain_min = -7.0
 $xy_domain_max = 7.0
-$z_domain_min = -36.0
-$z_domain_max = 36.0
+$z_domain_min = -82.0
+$z_domain_max = 82.0
 
 #change this when you change resolution,dtfac
-$out_every = 64
+$out_every = 60
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 70.0
+Cactus::cctk_final_time = 116.0
 #Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
@@ -55,10 +55,10 @@ LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 LightThroughDM::lambdaC_prefactor = 0.0005
-LightThroughDM::gaussian_wavepacket_width = 1.0
+LightThroughDM::gaussian_wavepacket_width = 8.5
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
-LightThroughDM::plane_wave_dist_from_DM = 32.0
+LightThroughDM::plane_wave_dist_from_DM = 55.0
 
 LightThroughDM::plane_wave_kx = 0.0229125947503
 LightThroughDM::plane_wave_ky = 0.0229125947503

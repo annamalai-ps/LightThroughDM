@@ -12,11 +12,11 @@ $nlevels = 1
 #xy domain defined by 3% of alpha amplitude
 $xy_domain_min = -7.0
 $xy_domain_max = 7.0
-$z_domain_min = -82.0
-$z_domain_max = 82.0
+$z_domain_min = -228.0
+$z_domain_max = 228.0
 
 #change this when you change resolution,dtfac
-$out_every = 60
+$out_every = 132
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -25,7 +25,7 @@ CarpetX::poison_undefined_values = yes
 
 CarpetX::ncells_x = 64
 CarpetX::ncells_y = 64
-CarpetX::ncells_z = 512
+CarpetX::ncells_z = 1425
 
 CarpetX::xmin = $xy_domain_min
 CarpetX::xmax = $xy_domain_max
@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 116.0
+Cactus::cctk_final_time = 260.0
 #Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
@@ -50,19 +50,19 @@ CarpetX::periodic_y = yes
 CarpetX::reflection_z = yes
 CarpetX::reflection_upper_z = yes
 
-LightThroughDM::initial_condition = "plane wave"
+LightThroughDM::initial_condition = "spline_alpha"
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 LightThroughDM::lambdaC_prefactor = 0.0005
-LightThroughDM::gaussian_wavepacket_width = 8.5
+LightThroughDM::gaussian_wavepacket_width = 35.0
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
-LightThroughDM::plane_wave_dist_from_DM = 55.0
+LightThroughDM::plane_wave_dist_from_DM = 130.0
 
-LightThroughDM::plane_wave_kx = 0.0229125947503
-LightThroughDM::plane_wave_ky = 0.0229125947503
-LightThroughDM::plane_wave_kz = 0.0229125947503
+LightThroughDM::plane_wave_kx = 0.00572814868757
+LightThroughDM::plane_wave_ky = 0.00572814868757
+LightThroughDM::plane_wave_kz = 0.00572814868757
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.75
