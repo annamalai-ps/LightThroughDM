@@ -50,7 +50,7 @@ CarpetX::periodic_y = yes
 CarpetX::reflection_z = yes
 CarpetX::reflection_upper_z = yes
 
-LightThroughDM::initial_condition = "plane wave"
+LightThroughDM::initial_condition = "spline_alpha"
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
