@@ -9,23 +9,23 @@ ActiveThorns = "
 "
 
 $nlevels = 1
-#xy domain defined by 3% of alpha amplitude
-$xy_domain_min = -1260.0
-$xy_domain_max = 1260.0
+#xy domain defined by ~2% of alpha amplitude
+$xy_domain_min = -630.0
+$xy_domain_max = 630.0
 $z_domain_min = -5120.0
 $z_domain_max = 5120.0
 
 #change this when you change resolution,dtfac
-$out_every = 77
+$out_every = 156
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
 
 CarpetX::poison_undefined_values = yes
 
-CarpetX::ncells_x = 64
-CarpetX::ncells_y = 64
-CarpetX::ncells_z = 512
+CarpetX::ncells_x = 128
+CarpetX::ncells_y = 128
+CarpetX::ncells_z = 1024
 
 CarpetX::xmin = $xy_domain_min
 CarpetX::xmax = $xy_domain_max
@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 6940.0
+Cactus::cctk_final_time = 6920.0
 #Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
