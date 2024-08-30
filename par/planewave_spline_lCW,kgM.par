@@ -76,20 +76,20 @@ IO::out_every = $out_every
 #    LightThroughDM::constraint
 #"
 
-CarpetX::out_silo_vars = "
-    LightThroughDM::phi
-    LightThroughDM::Ax
-    LightThroughDM::Ay
-    LightThroughDM::Az
-    LightThroughDM::phi_flat
-    LightThroughDM::Ax_flat
-    LightThroughDM::Ay_flat
-    LightThroughDM::Az_flat
-    
-    LightThroughDM::alpha
-    LightThroughDM::constraint
-    LightThroughDM::RMSError
-"
+#CarpetX::out_silo_vars = "
+#    LightThroughDM::phi
+#    LightThroughDM::Ax
+#    LightThroughDM::Ay
+#    LightThroughDM::Az
+#    LightThroughDM::phi_flat
+#    LightThroughDM::Ax_flat
+#    LightThroughDM::Ay_flat
+#    LightThroughDM::Az_flat
+#    
+#    LightThroughDM::alpha
+#    LightThroughDM::constraint
+#    LightThroughDM::RMSError
+#"
 
 CarpetX::out_openpmd_vars = "
     LightThroughDM::phi

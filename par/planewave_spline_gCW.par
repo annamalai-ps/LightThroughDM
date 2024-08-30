@@ -10,13 +10,13 @@ ActiveThorns = "
 
 $nlevels = 1
 #xy domain defined by 3% of alpha amplitude
-$xy_domain_min = -7.0
-$xy_domain_max = 7.0
-$z_domain_min = -48.0
-$z_domain_max = 48.0
+$xy_domain_min = -1260.0
+$xy_domain_max = 1260.0
+$z_domain_min = -5120.0
+$z_domain_max = 5120.0
 
 #change this when you change resolution,dtfac
-$out_every = 128
+$out_every = 58
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -25,7 +25,7 @@ CarpetX::poison_undefined_values = yes
 
 CarpetX::ncells_x = 64
 CarpetX::ncells_y = 64
-CarpetX::ncells_z = 1024
+CarpetX::ncells_z = 512
 
 CarpetX::xmin = $xy_domain_min
 CarpetX::xmax = $xy_domain_max
@@ -38,8 +38,8 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 96.0
-#Cactus::cctk_itlast = 3
+Cactus::cctk_final_time = 6880.0
+#Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
 CarpetX::ghost_size = 2
@@ -50,22 +50,22 @@ CarpetX::periodic_y = yes
 CarpetX::reflection_z = yes
 CarpetX::reflection_upper_z = yes
 
-LightThroughDM::initial_condition = "plane wave"
+LightThroughDM::initial_condition = "spline_alpha"
 LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
-LightThroughDM::lambdaC_prefactor = 0.0005
-LightThroughDM::gaussian_wavepacket_width = 1.0
+LightThroughDM::lambdaC_prefactor = 2.0
+LightThroughDM::gaussian_wavepacket_width = 600
 
-#plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.75%
-LightThroughDM::plane_wave_dist_from_DM = 43.0
+#plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
+LightThroughDM::plane_wave_dist_from_DM = 3500.0
 
-LightThroughDM::plane_wave_kx = 0.0229125947503
-LightThroughDM::plane_wave_ky = 0.0229125947503
-LightThroughDM::plane_wave_kz = 0.0229125947503
+LightThroughDM::plane_wave_kx = 0.000461880215352
+LightThroughDM::plane_wave_ky = 0.000461880215352
+LightThroughDM::plane_wave_kz = 0.000461880215352
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.5
+CarpetX::dtfac = 0.75
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
@@ -76,23 +76,7 @@ IO::out_every = $out_every
 #    LightThroughDM::constraint
 #"
 
-CarpetX::out_silo_vars = "
-    LightThroughDM::phi
-    LightThroughDM::Ax
-    LightThroughDM::Ay
-    LightThroughDM::Az
-    LightThroughDM::phi_flat
-    LightThroughDM::Ax_flat
-    LightThroughDM::Ay_flat
-    LightThroughDM::Az_flat
-    
-    LightThroughDM::alpha
-    LightThroughDM::constraint
-    LightThroughDM::RMSError
-"
-
-#CarpetX::openpmd_format = "ADIOS2_BP4"
-#CarpetX::out_openpmd_vars = "
+#CarpetX::out_silo_vars = "
 #    LightThroughDM::phi
 #    LightThroughDM::Ax
 #    LightThroughDM::Ay
@@ -100,12 +84,27 @@ CarpetX::out_silo_vars = "
 #    LightThroughDM::phi_flat
 #    LightThroughDM::Ax_flat
 #    LightThroughDM::Ay_flat
-#    LightThroughDM::Az_flat   
+#    LightThroughDM::Az_flat
+#    
 #    LightThroughDM::alpha
 #    LightThroughDM::constraint
 #    LightThroughDM::RMSError
-#    CoordinatesX::vertex_coords
 #"
+
+CarpetX::out_openpmd_vars = "
+    LightThroughDM::phi
+    LightThroughDM::Ax
+    LightThroughDM::Ay
+    LightThroughDM::Az
+    LightThroughDM::phi_flat
+    LightThroughDM::Ax_flat
+    LightThroughDM::Ay_flat
+    LightThroughDM::Az_flat   
+    LightThroughDM::alpha
+    LightThroughDM::constraint
+    LightThroughDM::RMSError
+    CoordinatesX::vertex_coords
+"
 
 TimerReport::out_every = $out_every
 TimerReport::out_filename = "TimerReport"
