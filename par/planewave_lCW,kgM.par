@@ -16,7 +16,7 @@ $z_domain_min = -82.0
 $z_domain_max = 82.0
 
 #change this when you change resolution,dtfac
-$out_every = 160
+$out_every = 239
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -65,7 +65,7 @@ LightThroughDM::plane_wave_ky = 0.0229125947503
 LightThroughDM::plane_wave_kz = 0.0229125947503
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.75
+CarpetX::dtfac = 0.5
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
