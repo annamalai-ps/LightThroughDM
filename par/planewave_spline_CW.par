@@ -55,10 +55,10 @@ LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 LightThroughDM::lambdaC_prefactor = 1.0
-LightThroughDM::gaussian_wavepacket_width = 500
+LightThroughDM::gaussian_wavepacket_width = 525
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
-LightThroughDM::plane_wave_dist_from_DM = 2800.0
+LightThroughDM::plane_wave_dist_from_DM = 2590.0
 
 LightThroughDM::plane_wave_kx = 0.000512341194025
 LightThroughDM::plane_wave_ky = 0.000512341194025
