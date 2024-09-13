@@ -88,7 +88,7 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
   const T amp = exp(-pow((z-plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
-  //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
+  //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0))) ;
 
 
   const T r = sqrt(r_square);
