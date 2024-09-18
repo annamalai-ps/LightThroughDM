@@ -50,8 +50,8 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   }
 
   
-  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". amp="<<amp;
-  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". damp="<<d_amp;
+  //std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". amp="<<amp;
+  //std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". damp="<<d_amp;
 
 
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
