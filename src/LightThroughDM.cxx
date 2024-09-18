@@ -35,12 +35,20 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
 
-  const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
-  const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
-  const T amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
-  const T d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
-                  - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
-  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". ampt1 ="<<amp_t1<<", ampt2 ="<<amp_t2<<". amp="<<amp;
+  if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){
+    const T amp = 0.0;
+    const T d_amp = 0.0;
+  }
+  else{
+    const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
+    const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
+    const T amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
+    const T d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
+                    - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
+  }
+
+  
+  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<'. (z-l1)'<<" ampt1 ="<<amp_t1<<", ampt2 ="<<amp_t2<<". amp="<<amp;
   std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". damp="<<d_amp;
 
 
@@ -104,10 +112,19 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
   const T envelope_slope = 5.0;
   const T l1 = plane_wave_dist_from_DM;
-  const T l2 = wavepacket_width +l1;
-  const T amp = pow(exp(-2.0*envelope_slope*(z-l1)),-1.0) + pow(exp(-2.0*envelope_slope*(l2-z)),-1.0) - 1.0; 
-  const T d_amp = 2.0*( ( exp(-2.0*envelope_slope*(z-l1))*pow(exp(-2.0*envelope_slope*(z-l1)) + 1.0,-2.0) ) 
-                        - ( exp(-2.0*envelope_slope*(l2-z))*pow(exp(-2.0*envelope_slope*(l2-z)) + 1.0,-2.0) ) );
+  const T l2 = wavepacket_width + l1;
+
+  if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){
+    const T amp = 0.0;
+    const T d_amp = 0.0;
+  }
+  else{
+    const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
+    const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
+    const T amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
+    const T d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
+                    - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
+  }
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0))) ;
 
 
