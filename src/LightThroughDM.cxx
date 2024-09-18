@@ -34,10 +34,13 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T envelope_slope = 5.0;
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
-  const T amp = ( pow( (1.0 + exp(-2.0*envelope_slope*(z-l1))),-1) + pow( (1.0 + exp(-2.0*envelope_slope*(l2-z))), -1) ) - 1.0; 
-  const T d_amp = 2.0*( ( exp(-(2.0*envelope_slope*(z-l1)))/pow( (1.0 + exp(- (2.0*envelope_slope*(z-l1)) ) ),2) ) 
-                        - ( exp(-(2.0*envelope_slope*(l2-z)))/pow( (1.0 + exp(-(2.0*envelope_slope*(l2-z)) ) ),2) ) );
-  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". t1 ="<<pow((1.0 + exp(-2.0*envelope_slope*(z-l1))),-1.0)<<". amp="<<amp;
+
+  const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
+  const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
+  const T amp = ( pow(d_amp_t1,-1) + pow( d_amp_t2, -1) ) - 1.0; 
+  const T d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(d_amp_t1,-2.0)) 
+                  - (exp(-(2.0*envelope_slope*(l2-z)))*pow(d_amp_t2,-2.0)) );
+  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". ampt1 ="<<amp_t1<<", ampt2 ="<<amp_t2<<". amp="<<amp;
   std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". damp="<<d_amp;
 
 
