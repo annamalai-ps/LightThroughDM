@@ -34,27 +34,27 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T envelope_slope = 5.0;
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
-  const T amp = pow(exp(-2.0*envelope_slope*(z-l1)),-1.0) + pow(exp(-2.0*envelope_slope*(l2-z)),-1.0) - 1.0; 
-  const T d_amp = 2.0*( ( exp(-2.0*envelope_slope*(z-l1))*pow(exp(-2.0*envelope_slope*(z-l1)) + 1.0,-2.0) ) 
-                        - ( exp(-2.0*envelope_slope*(l2-z))*pow(exp(-2.0*envelope_slope*(l2-z)) + 1.0,-2.0) ) );
+  const T amp = pow(exp(-2.0*envelope_slope*(z-l1)),-1.0) + pow(exp(-2.0*envelope_slope*(l2-z)) ,-1.0) - 1.0; 
+  const T d_amp = 2.0*( ( exp(-2.0*envelope_slope*(z-l1))*pow(exp(-2.0*envelope_slope*(z-l1)) + 1.0 ,-2.0) ) 
+                        - ( exp(-2.0*envelope_slope*(l2-z))*pow(exp(-2.0*envelope_slope*(l2-z)) + 1.0 ,-2.0) ) );
 
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
-      alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);      
+      alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
   }
   else{
       alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
   }
 
-  Ax = amp*cos(2.0*pi*(kz*z - omega*t));
-  nu = d_amp*cos(2.0*pi*(kz*z - omega*t)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*t));
-       //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - omega*t)) 
-       //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - omega*t)) );
-  Ay = amp*sin(2.0*pi*(kz*z - omega*t));
-  chi = d_amp*sin(2.0*pi*(kz*z - omega*t)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*t));
-        //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - omega*t)) 
-        //                                                -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - omega*t))  );
+  Ax = amp*cos(2.0*pi*(kz*z - t*omega));
+  nu = d_amp*cos(2.0*pi*(kz*z - t*omega)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - t*omega));
+       //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - t*omega)) 
+       //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - t*omega)) );
+  Ay = amp*sin(2.0*pi*(kz*z - t*omega));
+  chi = d_amp*sin(2.0*pi*(kz*z - t*omega)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - t*omega));
+        //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - t*omega)) 
+        //                                                -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - t*omega))  );
   Az = 0.0;
   psi = 0.0;
 
@@ -63,7 +63,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
     mu = 0.0;
   }
   else{
-    phi = 0.0;//2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*(kz*z - omega*t)) - y*cos(2.0*pi*(kz*z - omega*t)) )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
+    phi = 0.0;//2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*(kz*z - t*omega)) - y*cos(2.0*pi*(kz*z - t*omega)) )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
         //- sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
 
     mu = 0.0;//2.0*M*(x*Ax + y*Ay + z*Az)*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
