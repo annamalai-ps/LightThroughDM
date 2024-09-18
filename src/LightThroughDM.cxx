@@ -37,8 +37,8 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T amp = pow(exp(-2.0*envelope_slope*(z-l1)),-1.0) + pow(exp(-2.0*envelope_slope*(l2-z)) ,-1.0) - 1.0; 
   const T d_amp = 2.0*( ( exp(-2.0*envelope_slope*(z-l1))*pow(exp(-2.0*envelope_slope*(z-l1)) + 1.0 ,-2.0) ) 
                         - ( exp(-2.0*envelope_slope*(l2-z))*pow(exp(-2.0*envelope_slope*(l2-z)) + 1.0 ,-2.0) ) );
-  cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<'. amp='<<amp;
-  cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<'. damp='<<d_amp;
+  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". amp="<<amp;
+  std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". damp="<<d_amp;
 
 
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
