@@ -35,7 +35,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
   double amp = 0.0;
-  double d_amp = 0.0
+  double d_amp = 0.0;
 
   if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){
     amp = 0.0;
@@ -116,7 +116,7 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
   double amp = 0.0;
-  double d_amp = 0.0
+  double d_amp = 0.0;
 
   if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){
     amp = 0.0;
