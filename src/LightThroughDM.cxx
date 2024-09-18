@@ -66,7 +66,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
     phi = 0.0;//2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*(kz*z - omega*t)) - y*cos(2.0*pi*(kz*z - omega*t)) )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
         //- sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
 
-    mu = 2.0*M*amp*(x*Ax + y*Ay + z*Az)*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
+    mu = 2.0*M*(x*Ax + y*Ay + z*Az)*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
   }
 
