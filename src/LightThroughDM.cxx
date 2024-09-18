@@ -16,7 +16,7 @@ constexpr int dim = 3;
 
 
 template <typename T>
-constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
+constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T wavepacket_width,
                              const T kx, const T ky, const T kz,
                              const T t, const T x, const T y, const T z,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
@@ -30,7 +30,13 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T alpha_max = 0.1;
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
-  const T amp = exp(-pow((z-plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
+  //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
+  const T envelope_slope = 5.0;
+  const T l1 = plane_wave_dist_from_DM;
+  const T l2 = wavepacket_width +l1;
+  const T amp = pow(exp(-2.0*envelope_slope*(z-l1)),-1.0) + pow(exp(-2.0*envelope_slope*(l2-z)),-1.0) - 1.0; 
+  const T d_amp = 2.0*( ( exp(-2.0*envelope_slope*(z-l1))*pow(exp(-2.0*envelope_slope*(z-l1)) + 1.0,-2.0) ) 
+                        - ( exp(-2.0*envelope_slope*(l2-z))*pow(exp(-2.0*envelope_slope*(l2-z)) + 1.0,-2.0) ) );
 
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
 
@@ -41,12 +47,14 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
       alpha = M*pow(sqrt(r_square),-1.0)*erf(sqrt(r_square)/(sqrt(2.0)*lambda));
   }
 
-  Ax = amp*cos(2.0*pi*omega*(z + t));
-  nu = -2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*omega*(z + t)) 
-                                                        + pi*omega*pow(gaussian_wavepacket_width,2.0)*sin(2.0*pi*omega*(z + t)) ); //-amp*2.0*pi*omega*sin(2.0*pi*omega*(z + t));
-  Ay = amp*sin(2.0*pi*omega*(z + t));
-  chi = 2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( pi*omega*pow(gaussian_wavepacket_width,2.0)*cos(2.0*pi*omega*(z + t)) 
-                                                        -(z - plane_wave_dist_from_DM)*sin(2.0*pi*omega*(z + t))  ); //amp*2.0*pi*omega*cos(2.0*pi*omega*(z + t));
+  Ax = amp*cos(2.0*pi*(kz*z - omega*t));
+  nu = d_amp*cos(2.0*pi*(kz*z - omega*t)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*t));
+       //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - omega*t)) 
+       //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - omega*t)) );
+  Ay = amp*sin(2.0*pi*(kz*z - omega*t));
+  chi = d_amp*sin(2.0*pi*(kz*z - omega*t)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*t));
+        //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - omega*t)) 
+        //                                                -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - omega*t))  );
   Az = 0.0;
   psi = 0.0;
 
@@ -55,10 +63,10 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
     mu = 0.0;
   }
   else{
-    phi = 0.0;//2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*omega*(z + t)) - y*cos(2.0*pi*omega*(z + t)) )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
+    phi = 0.0;//2.0*M*amp*pow(2.0*pi*omega,-1.0)*( x*sin(2.0*pi*(kz*z - omega*t)) - y*cos(2.0*pi*(kz*z - omega*t)) )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
         //- sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
 
-    mu = 2.0*M*amp*( x*cos(2.0*pi*omega*(z + t)) + y*sin(2.0*pi*omega*(z + t))  )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
+    mu = 2.0*M*amp*( x*cos(2.0*pi*(kz*z - omega*t)) + y*sin(2.0*pi*(kz*z - omega*t))  )*( erf(sqrt(r_square)/(sqrt(2)*lambda))*r_inv_cubed
         - sqrt(2/pi)*exp(-r_square/(2*pow(lambda,2.0)))/(lambda*r_square) );
   }
 
@@ -74,7 +82,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
 }
 
 template <typename T>
-constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T gaussian_wavepacket_width,
+constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T wavepacket_width,
                              const T kx, const T ky, const T kz,
                              const T time, const T x, const T y, const T z,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
@@ -87,7 +95,13 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T alpha_max = 0.1;
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
-  const T amp = exp(-pow((z-plane_wave_dist_from_DM)/gaussian_wavepacket_width,2.0));
+  //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
+  const T envelope_slope = 5.0;
+  const T l1 = plane_wave_dist_from_DM;
+  const T l2 = wavepacket_width +l1;
+  const T amp = pow(exp(-2.0*envelope_slope*(z-l1)),-1.0) + pow(exp(-2.0*envelope_slope*(l2-z)),-1.0) - 1.0; 
+  const T d_amp = 2.0*( ( exp(-2.0*envelope_slope*(z-l1))*pow(exp(-2.0*envelope_slope*(z-l1)) + 1.0,-2.0) ) 
+                        - ( exp(-2.0*envelope_slope*(l2-z))*pow(exp(-2.0*envelope_slope*(l2-z)) + 1.0,-2.0) ) );
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0))) ;
 
 
@@ -117,12 +131,14 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
     alpha = 0.0;
   }
 
-  Ax = amp*cos(2.0*pi*omega*(z + time));
-  nu = -2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*omega*(z + time)) 
-                                                        + pi*omega*pow(gaussian_wavepacket_width,2.0)*sin(2.0*pi*omega*(z + time)) );
-  Ay = amp*sin(2.0*pi*omega*(z + time));
-  chi = 2.0*amp*pow(gaussian_wavepacket_width,-2.0)*( pi*omega*pow(gaussian_wavepacket_width,2.0)*cos(2.0*pi*omega*(z + time)) 
-                                                        -(z - plane_wave_dist_from_DM)*sin(2.0*pi*omega*(z + time))  );
+  Ax = amp*cos(2.0*pi*(kz*z - omega*t));
+  nu = d_amp*cos(2.0*pi*(kz*z - omega*t)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*t));
+       //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - omega*t)) 
+       //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - omega*t)) );
+  Ay = amp*sin(2.0*pi*(kz*z - omega*t));
+  chi = d_amp*sin(2.0*pi*(kz*z - omega*t)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*t));
+        //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - omega*t)) 
+        //
   Az = 0.0;
   psi = 0.0;
   phi = 0.0;
@@ -148,7 +164,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
-            plane_wave(lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
+            plane_wave(lambdaC_prefactor, plane_wave_dist_from_DM, wavepacket_width,
                           plane_wave_kx, plane_wave_ky, plane_wave_kz,
                           cctk_time, p.x, p.y, p.z,
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
@@ -156,7 +172,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
             
           }
           else if (CCTK_EQUALS(initial_condition, "spline_alpha")) {
-            spline_alpha(lambdaC_prefactor, plane_wave_dist_from_DM, gaussian_wavepacket_width,
+            spline_alpha(lambdaC_prefactor, plane_wave_dist_from_DM, wavepacket_width,
                           plane_wave_kx, plane_wave_ky, plane_wave_kz,
                           cctk_time, p.x, p.y, p.z,
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),

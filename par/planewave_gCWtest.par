@@ -10,13 +10,13 @@ ActiveThorns = "
 
 $nlevels = 1
 #xy domain defined by ~2% of alpha amplitude
-$xy_domain_min = -100.0
-$xy_domain_max = 100.0
-$z_domain_min = 1200.0
-$z_domain_max = 1400.0
+$xy_domain_min = -50.0
+$xy_domain_max = 50.0
+$z_domain_min = 1280.0
+$z_domain_max = 1420.0
 
 #change this when you change resolution,dtfac
-$out_every = 100
+$out_every = 50
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 200.0
+Cactus::cctk_final_time = 20.0
 #Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
@@ -55,7 +55,7 @@ LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 LightThroughDM::lambdaC_prefactor = 1000.0
-LightThroughDM::gaussian_wavepacket_width = 3.5
+LightThroughDM::wavepacket_width = 31.0
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
 LightThroughDM::plane_wave_dist_from_DM = 1380.0
