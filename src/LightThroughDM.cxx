@@ -37,7 +37,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   double amp = 0.0;
   double d_amp = 0.0;
 
-  if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){
+  if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){ // if condition is to prevent e^+/-100 overflow
     amp = 0.0;
     d_amp = 0.0;
   }
