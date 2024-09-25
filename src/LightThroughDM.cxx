@@ -126,7 +126,7 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
     double amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
     double amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
     amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
-    d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
+    d_amp = 2.0*envelope_slope*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
                     - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
   }
   //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0))) ;
