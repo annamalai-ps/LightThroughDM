@@ -16,7 +16,7 @@ $z_domain_min = 1280.0
 $z_domain_max = 1420.0
 
 #change this when you change resolution,dtfac
-$out_every = 14
+$out_every = 28
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -60,9 +60,9 @@ LightThroughDM::wavepacket_width = 31.0
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets 0.075%
 LightThroughDM::plane_wave_dist_from_DM = 1380.0
 
-LightThroughDM::plane_wave_kx = 0.18
+LightThroughDM::plane_wave_kx = 0.0
 LightThroughDM::plane_wave_ky = 0.0
-LightThroughDM::plane_wave_kz = 0.0
+LightThroughDM::plane_wave_kz = 0.18
 
 ODESolvers::method = "RK4"
 CarpetX::dtfac = 0.5
