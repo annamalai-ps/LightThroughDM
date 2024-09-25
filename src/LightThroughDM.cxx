@@ -42,8 +42,8 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
     d_amp = 0.0;
   }
   else{
-    double amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
-    double amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
+    const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
+    const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
     amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
     d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
                     - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
@@ -67,8 +67,8 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   nu = d_amp*cos(2.0*pi*(kz*z - t*omega)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - t*omega));
        //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - t*omega)) 
        //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - t*omega)) );
-  Ay = amp*sin(2.0*pi*(kz*z - t*omega));
-  chi = d_amp*sin(2.0*pi*(kz*z - t*omega)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - t*omega));
+  Ay = 0.0;//amp*sin(2.0*pi*(kz*z - t*omega));
+  chi = 0.0;//d_amp*sin(2.0*pi*(kz*z - t*omega)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - t*omega));
         //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - t*omega)) 
         //                                                -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - t*omega))  );
   Az = 0.0;
@@ -162,8 +162,8 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   nu = d_amp*cos(2.0*pi*(kz*z - omega*time)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*time));
        //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - omega*time)) 
        //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - omega*time)) );
-  Ay = amp*sin(2.0*pi*(kz*z - omega*time));
-  chi = d_amp*sin(2.0*pi*(kz*z - omega*time)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*time));
+  Ay = 0.0;//amp*sin(2.0*pi*(kz*z - omega*time));
+  chi = 0.0;d_amp*sin(2.0*pi*(kz*z - omega*time)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*time));
         //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - omega*time)) 
         //
   Az = 0.0;
