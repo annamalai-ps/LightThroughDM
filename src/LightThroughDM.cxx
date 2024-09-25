@@ -45,7 +45,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
     const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
     const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
     amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
-    d_amp = 2.0*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
+    d_amp = 2.0*envelope_slope*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
                     - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
   }
 
