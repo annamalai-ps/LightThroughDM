@@ -16,7 +16,7 @@ constexpr int dim = 3;
 
 
 template <typename T>
-constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T wavepacket_width,
+constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T wavepacket_width, const T envelope_slope,
                              const T kx, const T ky, const T kz,
                              const T t, const T x, const T y, const T z,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
@@ -31,7 +31,6 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
   //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
-  const T envelope_slope = 5.0;
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
   double amp = 0.0;
@@ -98,7 +97,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
 }
 
 template <typename T>
-constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T wavepacket_width,
+constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_from_DM, const T wavepacket_width,const T envelope_slope,
                              const T kx, const T ky, const T kz,
                              const T time, const T x, const T y, const T z,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
@@ -112,13 +111,12 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
   //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
-  const T envelope_slope = 5.0;
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
   double amp = 0.0;
   double d_amp = 0.0;
 
-  if ( z<(l1-envelope_slope)||z>(l2+envelope_slope)){
+  if ( z<(l1-(l1/wavepacket_width))||z>(l2+(l1/wavepacket_width))){
     amp = 0.0;
     d_amp = 0.0;
   }
@@ -133,8 +131,8 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
 
 
   const T r = sqrt(r_square);
-  const T r1 = M/(0.01*alpha_max); // 0.1%
-  const T r2 = M/(0.0075*alpha_max); //0.075%
+  const T r1 = M/(0.04*alpha_max); // 4%
+  const T r2 = M/(0.025*alpha_max); // 2.5%
   
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
     alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
@@ -191,7 +189,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
           
           if (CCTK_EQUALS(initial_condition, "plane wave")) {
-            plane_wave(lambdaC_prefactor, plane_wave_dist_from_DM, wavepacket_width,
+            plane_wave(lambdaC_prefactor, plane_wave_dist_from_DM, wavepacket_width, envelope_slope,
                           plane_wave_kx, plane_wave_ky, plane_wave_kz,
                           cctk_time, p.x, p.y, p.z,
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),
@@ -199,7 +197,7 @@ extern "C" void LightThroughDM_Initial(CCTK_ARGUMENTS) {
             
           }
           else if (CCTK_EQUALS(initial_condition, "spline_alpha")) {
-            spline_alpha(lambdaC_prefactor, plane_wave_dist_from_DM, wavepacket_width,
+            spline_alpha(lambdaC_prefactor, plane_wave_dist_from_DM, wavepacket_width, envelope_slope,
                           plane_wave_kx, plane_wave_ky, plane_wave_kz,
                           cctk_time, p.x, p.y, p.z,
                           phi(p.I), mu(p.I), Ax(p.I), nu(p.I), Ay(p.I), chi(p.I), Az(p.I), psi(p.I), alpha(p.I),

@@ -21,6 +21,11 @@ CCTK_REAL wavepacket_width "initial wavepacket width"
   *:* :: ""
 } 1.0
 
+CCTK_REAL envelope_slope "k of envelope"
+{
+  *:* :: ""
+} 1.0
+
 CCTK_REAL plane_wave_kx "kx for plane wave"
 {
   *:* :: ""
