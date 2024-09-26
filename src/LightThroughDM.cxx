@@ -38,7 +38,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   double exp_term1 = 2 * envelope_slope * (z - l1);
   double exp_term2 = 2 * envelope_slope * (l2 - z);
   
-  double A_t1 = 0.0, A_t2 = 0.0, exp1 = 0.0, exp2 = 0.0;
+  double amp = 0.0, d_amp =0.0, A_t1 = 0.0, A_t2 = 0.0, exp1 = 0.0, exp2 = 0.0;
   
   if (exp_term1 > 99) {
       d_amp = 0.0;
@@ -126,14 +126,14 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T lambda = lambdaC_prefactor*(2*pi/M);
   //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
 
-  
+
   /*-------Implement's wave train amplitude---------*/
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
   double exp_term1 = 2 * envelope_slope * (z - l1);
   double exp_term2 = 2 * envelope_slope * (l2 - z);
   
-  double A_t1 = 0.0, A_t2 = 0.0, exp1 = 0.0, exp2 = 0.0;
+  double amp = 0.0, d_amp =0.0, A_t1 = 0.0, A_t2 = 0.0, exp1 = 0.0, exp2 = 0.0;
   
   if (exp_term1 > 99) {
       d_amp = 0.0;
