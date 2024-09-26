@@ -21,7 +21,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
                              const T t, const T x, const T y, const T z,
                              T &phi, T &mu, T &Ax, T &nu, T &Ay, T &chi, T &Az, T &psi, T &alpha,
                              T &phi_flat, T &mu_flat, T &Ax_flat, T &nu_flat, T &Ay_flat, T &chi_flat, T &Az_flat, T &psi_flat) {
-  using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp;
+  using std::acos, std::cos, std::pow, std::sin, std::sqrt, std::erf, std::exp, std::abs;
 
   const T pi = acos(-T(1));
   const T omega = sqrt(pow(kx, 2) + pow(ky, 2) + pow(kz, 2));
@@ -31,29 +31,47 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
   //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
+  
+  /*-------Implement's wave train amplitude---------*/
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
-  double amp = 0.0;
-  double d_amp = 0.0;
-
-  if ( z<(l1-(l1/wavepacket_width))||z>(l2+(l1/wavepacket_width))){ // if condition is to prevent e^+/-100 overflow
-    amp = 0.0;
-    d_amp = 0.0;
-  }
-  else{
-    const T amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
-    const T amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
-    amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
-    d_amp = 2.0*envelope_slope*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
-                    - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
-  }
-
+  double exp_term1 = 2 * envelope_slope * (z - l1);
+  double exp_term2 = 2 * envelope_slope * (l2 - z);
   
-  //std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". amp="<<amp;
-  //std::cout<<"\n (x,y,z)="<<x<<','<<y<<','<<z<<". damp="<<d_amp;
-
-
-  //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0)));
+  double A_t1 = 0.0, A_t2 = 0.0, exp1 = 0.0, exp2 = 0.0;
+  
+  if (exp_term1 > 99) {
+      d_amp = 0.0;
+      A_t1 = 1.0;
+  }
+  if (exp_term1 < -99) {
+      d_amp = 0.0;
+      A_t1 = 0.0;
+  }
+  if (abs(exp_term1) < 99) {
+      exp1 = exp(-exp_term1);
+      A_t1 = 1 / (1 + exp1);
+  }
+  if (exp_term2 > 99) {
+      d_amp = 0.0;
+      A_t2 = 1.0;
+  }
+  if (exp_term2 < -99) {
+      d_amp = 0.0;
+      A_t2 = 0.0;
+  }
+  if (abs(exp_term2) < 99) {
+      exp2 = exp(-exp_term2);
+      A_t2 = 1 / (1 + exp2);
+  }
+  amp = A_t1 + A_t2 - 1;
+  if (abs(exp_term1) < 99 && abs(exp_term2) < 99) {
+      double d_At1 = exp1 * pow(A_t1, 2.0);
+      double d_At2 = exp2 * pow(A_t2, 2.0);
+      d_amp = 2.0 * envelope_slope * (d_At1 - d_At2);
+  }
+  /*-------------------------------------------*/
+ 
 
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
       alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
@@ -64,12 +82,8 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
 
   Ax = amp*cos(2.0*pi*(kz*z - t*omega));
   nu = d_amp*cos(2.0*pi*(kz*z - t*omega)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - t*omega));
-       //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - t*omega)) 
-       //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - t*omega)) );
-  Ay = 0.0;//amp*sin(2.0*pi*(kz*z - t*omega));
-  chi = 0.0;//d_amp*sin(2.0*pi*(kz*z - t*omega)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - t*omega));
-        //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - t*omega)) 
-        //                                                -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - t*omega))  );
+  Ay = 0.0;
+  chi = 0.0;                                            -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - t*omega))  );
   Az = 0.0;
   psi = 0.0;
 
@@ -111,24 +125,47 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   const T M = pow(2.0*pow(pi, 3.0),0.25)*sqrt(lambdaC_prefactor*alpha_max);
   const T lambda = lambdaC_prefactor*(2*pi/M);
   //const T amp = exp(-pow((z-plane_wave_dist_from_DM)/wavepacket_width,2.0));
+
+  
+  /*-------Implement's wave train amplitude---------*/
   const T l1 = plane_wave_dist_from_DM;
   const T l2 = wavepacket_width + l1;
-  double amp = 0.0;
-  double d_amp = 0.0;
-
-  if ( z<(l1-(l1/wavepacket_width))||z>(l2+(l1/wavepacket_width))){
-    amp = 0.0;
-    d_amp = 0.0;
+  double exp_term1 = 2 * envelope_slope * (z - l1);
+  double exp_term2 = 2 * envelope_slope * (l2 - z);
+  
+  double A_t1 = 0.0, A_t2 = 0.0, exp1 = 0.0, exp2 = 0.0;
+  
+  if (exp_term1 > 99) {
+      d_amp = 0.0;
+      A_t1 = 1.0;
   }
-  else{
-    double amp_t1 = 1.0 + exp(- (2.0*envelope_slope*(z-l1)) );
-    double amp_t2 = 1.0 + exp(- (2.0*envelope_slope*(l2-z)) );
-    amp = ( pow(amp_t1,-1) + pow( amp_t2, -1) ) - 1.0; 
-    d_amp = 2.0*envelope_slope*( (exp(-(2.0*envelope_slope*(z-l1)))*pow(amp_t1,-2.0)) 
-                    - (exp(-(2.0*envelope_slope*(l2-z)))*pow(amp_t2,-2.0)) );
+  if (exp_term1 < -99) {
+      d_amp = 0.0;
+      A_t1 = 0.0;
   }
-  //density = ( M*pow(lambda,-3.0)*pow(2.0*pi,-1.5) )*exp(-r_square/(2.0*pow(lambda,2.0))) ;
-
+  if (abs(exp_term1) < 99) {
+      exp1 = exp(-exp_term1);
+      A_t1 = 1 / (1 + exp1);
+  }
+  if (exp_term2 > 99) {
+      d_amp = 0.0;
+      A_t2 = 1.0;
+  }
+  if (exp_term2 < -99) {
+      d_amp = 0.0;
+      A_t2 = 0.0;
+  }
+  if (abs(exp_term2) < 99) {
+      exp2 = exp(-exp_term2);
+      A_t2 = 1 / (1 + exp2);
+  }
+  amp = A_t1 + A_t2 - 1;
+  if (abs(exp_term1) < 99 && abs(exp_term2) < 99) {
+      double d_At1 = exp1 * pow(A_t1, 2.0);
+      double d_At2 = exp2 * pow(A_t2, 2.0);
+      d_amp = 2.0 * envelope_slope * (d_At1 - d_At2);
+  }
+  /*-------------------------------------------*/
 
   const T r = sqrt(r_square);
   const T r1 = M/(0.04*alpha_max); // 4%
