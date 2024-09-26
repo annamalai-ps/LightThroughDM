@@ -83,7 +83,7 @@ constexpr void plane_wave(const T lambdaC_prefactor, const T plane_wave_dist_fro
   Ax = amp*cos(2.0*pi*(kz*z - t*omega));
   nu = d_amp*cos(2.0*pi*(kz*z - t*omega)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - t*omega));
   Ay = 0.0;
-  chi = 0.0;                                            -(z - plane_wave_dist_from_DM)*sin(2.0*pi*(kz*z - t*omega))  );
+  chi = 0.0;
   Az = 0.0;
   psi = 0.0;
 
@@ -195,12 +195,8 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
 
   Ax = amp*cos(2.0*pi*(kz*z - omega*time));
   nu = d_amp*cos(2.0*pi*(kz*z - omega*time)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*time));
-       //-2.0*amp*pow(wavepacket_width,-2.0)*( (z - plane_wave_dist_from_DM)*cos(2.0*pi*(kz*z - omega*time)) 
-       //                                                 + pi*omega*pow(wavepacket_width,2.0)*sin(2.0*pi*(kz*z - omega*time)) );
-  Ay = 0.0;//amp*sin(2.0*pi*(kz*z - omega*time));
-  chi = 0.0;//d_amp*sin(2.0*pi*(kz*z - omega*time)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*time));
-        //2.0*amp*pow(wavepacket_width,-2.0)*( pi*omega*pow(wavepacket_width,2.0)*cos(2.0*pi*(kz*z - omega*time)) 
-        //
+  Ay = 0.0;
+  chi = 0.0;
   Az = 0.0;
   psi = 0.0;
   phi = 0.0;
