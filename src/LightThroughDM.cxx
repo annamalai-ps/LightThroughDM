@@ -192,6 +192,7 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   if (r>r2){
     alpha = 0.0;
   }
+  std::cout<<"\n (x,y,z)= ("<<x<<","<<y<<","<<z<<",) alpha="<<alpha;
 
   Ax = amp*cos(2.0*pi*(kz*z - omega*time));
   nu = d_amp*cos(2.0*pi*(kz*z - omega*time)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*time));
