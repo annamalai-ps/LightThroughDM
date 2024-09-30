@@ -175,7 +175,7 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
     alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
     std::cout<<"\n (x,y,z)= ("<<x<<","<<y<<","<<z<<",) alpha1="<<alpha;
   }
-  if (r < r1) {
+  if (r <= r1) {
     alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*lambda));
     std::cout<<"\n (x,y,z)= ("<<x<<","<<y<<","<<z<<",) alpha2="<<alpha;
   }
