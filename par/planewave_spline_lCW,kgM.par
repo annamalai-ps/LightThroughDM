@@ -38,7 +38,7 @@ CarpetX::zmax = $z_domain_max
 CarpetX::max_num_levels = $nlevels
 
 Cactus::terminate = "time"
-Cactus::cctk_final_time = 60.0
+Cactus::cctk_final_time = 50.0
 #Cactus::cctk_itlast = 100
 
 #Set ghost zones for 4th order finite difference method:
