@@ -168,13 +168,13 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   /*-------------------------------------------*/
 
   const T r = sqrt(r_square);
-  const T r1 = M/(0.04*alpha_max); // 4%
-  const T r2 = M/(0.025*alpha_max); // 2.5%
+  const T r1 = M/(0.12*alpha_max); // 4%
+  const T r2 = M/(0.06*alpha_max); // 2.5%
   
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
     alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
   }
-  if (r <= r1) {
+  if (r < r1) {
     alpha = M*pow(r,-1.0)*erf(r/(sqrt(2.0)*lambda));
   }
   else if (r<=r2 && r>=r1){
@@ -187,7 +187,7 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
     const T a = d_alp1*dr - (alp2 - alp1);
     const T b = -d_alp2*dr + (alp2 - alp1);
     
-    alpha = (1-t)*alp1 + t*alp2 + t*(1-t)*( a*(1-t) + b*t );
+    alpha = -(1-t)*alp1 + t*alp2 + t*(1-t)*( a*(1-t) - b*t );
   }
   if (r>r2){
     alpha = 0.0;
