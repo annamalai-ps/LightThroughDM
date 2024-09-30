@@ -68,7 +68,7 @@ LightThroughDM::plane_wave_ky = 0.0
 LightThroughDM::plane_wave_kz = 1.42463137728
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.5
+CarpetX::dtfac = 0.25
 
 IO::out_dir = $parfile
 IO::out_every = $out_every
