@@ -16,7 +16,7 @@ $z_domain_min = -28.0
 $z_domain_max = 28.0
 
 #change this when you change resolution,dtfac
-$out_every = 64
+$out_every = 256
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
