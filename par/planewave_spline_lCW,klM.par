@@ -9,7 +9,7 @@ ActiveThorns = "
 "
 
 $nlevels = 1
-#xy domain defined by ~2% of alpha amplitude
+#xy domain defined by ~12% of alpha amplitude
 $xy_domain_min = -7.0
 $xy_domain_max = 7.0
 $z_domain_min = -40.0

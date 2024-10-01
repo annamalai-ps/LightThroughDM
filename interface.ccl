@@ -68,10 +68,10 @@ CCTK_REAL constraint TYPE=gf TAGS='checkpoint="no"'
   constraint_violation_flat
 } "constraint violation"
 
-CCTK_REAL RMSError TYPE=gf TAGS='checkpoint="no"'
-{
-  phi_RMSE
-  Ax_RMSE
-  Ay_RMSE
-  Az_RMSE
-} "deviation from flat space wave equation"
+#  CCTK_REAL RMSError TYPE=gf TAGS='checkpoint="no"'
+#  {
+#   phi_RMSE
+#   Ax_RMSE
+#   Ay_RMSE
+#   Az_RMSE
+#  } "deviation from flat space wave equation"

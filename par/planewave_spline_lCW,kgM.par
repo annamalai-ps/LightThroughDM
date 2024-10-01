@@ -9,14 +9,14 @@ ActiveThorns = "
 "
 
 $nlevels = 1
-#xy domain defined by ~2% of alpha amplitude
+#xy domain defined by ~12% of alpha amplitude
 $xy_domain_min = -7.0
 $xy_domain_max = 7.0
 $z_domain_min = -28.0
 $z_domain_max = 28.0
 
 #change this when you change resolution,dtfac
-$out_every = 256
+$out_every = 128
 
 Cactus::cctk_show_schedule = no
 Cactus::presync_mode = "mixed-error"
@@ -60,7 +60,7 @@ LightThroughDM::wavepacket_width = 4.0
 # CAUTION!!! envelope_slope maximum is 10
 LightThroughDM::envelope_slope = 5.0
 
-#plane_wave_dist_from_DM defined at z where alpha amplitude gets 2.5%
+#plane_wave_dist_from_DM defined at z where alpha amplitude gets 6%
 LightThroughDM::plane_wave_dist_from_DM = 22
 
 LightThroughDM::plane_wave_kx = 0.0
@@ -68,7 +68,7 @@ LightThroughDM::plane_wave_ky = 0.0
 LightThroughDM::plane_wave_kz = 1.42463137728
 
 ODESolvers::method = "RK4"
-CarpetX::dtfac = 0.25
+CarpetX::dtfac = 0.5
 
 IO::out_dir = $parfile
 IO::out_every = $out_every

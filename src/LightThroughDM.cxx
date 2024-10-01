@@ -143,17 +143,17 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
       d_amp = 0.0;
       A_t1 = 0.0;
   }
-  if (abs(exp_term1) < 99) {
-      exp1 = exp(-exp_term1);
-      A_t1 = 1 / (1 + exp1);
-  }
   if (exp_term2 > 99) {
       d_amp = 0.0;
       A_t2 = 1.0;
   }
   if (exp_term2 < -99) {
       d_amp = 0.0;
-      A_t2 = 0.0;
+      A_t2 = 0.0; 
+  }
+  if (abs(exp_term1) < 99) {
+      exp1 = exp(-exp_term1);
+      A_t1 = 1 / (1 + exp1);
   }
   if (abs(exp_term2) < 99) {
       exp2 = exp(-exp_term2);
@@ -168,8 +168,8 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
   /*-------------------------------------------*/
 
   const T r = sqrt(r_square);
-  const T r1 = M/(0.12*alpha_max); // 4%
-  const T r2 = M/(0.06*alpha_max); // 2.5%
+  const T r1 = M/(0.12*alpha_max); // 12%
+  const T r2 = M/(0.06*alpha_max); // 6%
   
   if (x == 0 && y == 0 && z == 0.0){  //defn for indeterminate form at r=0
     alpha = M*pow(lambda,-1.0)*sqrt(2.0/pi);
@@ -414,6 +414,7 @@ extern "C" void LightThroughDM_Constraint(CCTK_ARGUMENTS) {
       });
 }
 
+/*
 extern "C" void LightThroughDM_RMSError(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTSX_LightThroughDM_RMSError;
   DECLARE_CCTK_PARAMETERS;
@@ -429,7 +430,7 @@ extern "C" void LightThroughDM_RMSError(CCTK_ARGUMENTS) {
                     
       });
 }
-
+*/
 
 
 } // namespace LightThroughDM
