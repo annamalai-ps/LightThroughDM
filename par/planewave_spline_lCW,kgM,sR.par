@@ -55,13 +55,12 @@ LightThroughDM::boundary_condition = "periodic"
 
 # Physics parameters
 LightThroughDM::lambdaC_prefactor = 0.002
+
 LightThroughDM::wavepacket_width = 1.4
+LightThroughDM::envelope_slope = 20.0
 
 #plane_wave_dist_from_DM defined at z where alpha amplitude gets to 6%
 LightThroughDM::plane_wave_dist_from_DM = 7.2
-
-# CAUTION!!! envelope_slope maximum is 10
-LightThroughDM::envelope_slope = 20.0
 
 
 
