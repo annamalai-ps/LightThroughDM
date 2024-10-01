@@ -105,7 +105,6 @@ CarpetX::out_openpmd_vars = "
     LightThroughDM::Az_flat   
     LightThroughDM::alpha
     LightThroughDM::constraint
-    LightThroughDM::RMSError
     CoordinatesX::vertex_coords
 "
 
