@@ -195,8 +195,8 @@ constexpr void spline_alpha(const T lambdaC_prefactor, const T plane_wave_dist_f
 
   Ax = amp*cos(2.0*pi*(kz*z - omega*time));
   nu = d_amp*cos(2.0*pi*(kz*z - omega*time)) - amp*(2.0*pi*kz)*sin(2.0*pi*(kz*z - omega*time));
-  Ay = 0.0;
-  chi = 0.0;
+  Ay = amp*sin(2.0*pi*(kz*z - omega*time));
+  chi = d_amp*sin(2.0*pi*(kz*z - omega*time)) + amp*(2.0*pi*kz)*cos(2.0*pi*(kz*z - omega*time));
   Az = 0.0;
   psi = 0.0;
   phi = 0.0;
